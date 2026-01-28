@@ -117,8 +117,26 @@ body {
 
 /* Text position variants (applied to .main-content) */
 
+/* Button always last */
+.btn-record {
+  order: 10;
+}
+
+/* Logo always second to last */
+.main-logo {
+  order: 9;
+}
+
 .text-above .main-text-wrapper {
-  order: -1;
+  order: 0;
+}
+
+.text-above .main-photo-wrapper {
+  order: 1;
+}
+
+.text-below .main-photo-wrapper {
+  order: 0;
 }
 
 .text-below .main-text-wrapper {
