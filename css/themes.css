@@ -1,1 +1,90 @@
 /* Theme presets - Task 3 */
+/* 7 theme presets using CSS custom properties */
+
+/* Default fallback when no theme class is set */
+:root {
+  --bg-color: #FFF8F0;
+  --text-color: #5C4033;
+  --btn-color: #C8A96E;
+  --btn-text-color: #FFFFFF;
+  --accent-color: #D4AF37;
+  --btn-radius: 12px;
+  --font-display: 'Tangerine', cursive;
+}
+
+/* 1. Mariage Classique - Warm ivory & gold, elegant serif */
+body.mariage-classique {
+  --bg-color: #FFF8F0;
+  --text-color: #5C4033;
+  --btn-color: #C8A96E;
+  --btn-text-color: #FFFFFF;
+  --accent-color: #D4AF37;
+  --btn-radius: 30px;
+  --font-display: 'Tangerine', cursive;
+}
+
+/* 2. Mariage Luxe - Dark & gold, sharp edges */
+body.mariage-luxe {
+  --bg-color: #0A0A0A;
+  --text-color: #F5F5F5;
+  --btn-color: #D4AF37;
+  --btn-text-color: #0A0A0A;
+  --accent-color: #B8860B;
+  --btn-radius: 0px;
+  --font-display: 'Tangerine', cursive;
+}
+
+/* 3. Baby Shower - Soft pink palette, rounded shapes */
+body.baby-shower {
+  --bg-color: #FFF0F5;
+  --text-color: #8B5E6B;
+  --btn-color: #F4A7BB;
+  --btn-text-color: #FFFFFF;
+  --accent-color: #FFB6C1;
+  --btn-radius: 25px;
+  --font-display: 'Tangerine', cursive;
+}
+
+/* 4. Corporate - Professional blue, system font stack */
+body.corporate {
+  --bg-color: #F5F5F5;
+  --text-color: #1A2A3A;
+  --btn-color: #1A3A5C;
+  --btn-text-color: #FFFFFF;
+  --accent-color: #2C5F8A;
+  --btn-radius: 6px;
+  --font-display: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* 5. Festif - Neon party vibes on dark purple */
+body.festif {
+  --bg-color: #1A0A2E;
+  --text-color: #F5F5F5;
+  --btn-color: #E91E8C;
+  --btn-text-color: #FFFFFF;
+  --accent-color: #FFD700;
+  --btn-radius: 30px;
+  --font-display: 'Tangerine', cursive;
+}
+
+/* 6. Marque - Minimal black & white, system font */
+body.marque {
+  --bg-color: #FFFFFF;
+  --text-color: #111111;
+  --btn-color: #111111;
+  --btn-text-color: #FFFFFF;
+  --accent-color: #333333;
+  --btn-radius: 0px;
+  --font-display: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* 7. Hotellerie - Warm earth tones, subtle rounding */
+body.hotellerie {
+  --bg-color: #F5EFE6;
+  --text-color: #3E2C1C;
+  --btn-color: #8B6F4E;
+  --btn-text-color: #FFFFFF;
+  --accent-color: #C8A96E;
+  --btn-radius: 8px;
+  --font-display: 'Tangerine', cursive;
+}
