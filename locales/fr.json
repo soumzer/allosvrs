@@ -1,1 +1,7 @@
-{}
+{
+  "record": "Enregistrer un message",
+  "countdown_instruction": "Décrochez le téléphone et attendez le bip",
+  "stop": "Arrêter",
+  "confirmation": "Vidéo enregistrée !",
+  "returning": "Retour automatique..."
+}

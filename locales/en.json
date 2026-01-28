@@ -1,1 +1,7 @@
-{}
+{
+  "record": "Record a message",
+  "countdown_instruction": "Pick up the phone and wait for the beep",
+  "stop": "Stop",
+  "confirmation": "Video recorded!",
+  "returning": "Returning shortly..."
+}
