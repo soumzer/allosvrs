@@ -113,8 +113,8 @@ const Admin = {
         }, 2000);
     },
 
-    previewEvent() {
-        this.saveEventConfig();
+    async previewEvent() {
+        await this.saveEventConfig();
         App.showScreen('main');
         setTimeout(() => {
             App.showScreen('setup');

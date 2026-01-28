@@ -16,7 +16,7 @@ const App = {
         const config = Config.getAll();
         this.applyTheme(config.theme, config.customColors);
         await I18n.load(config.language);
-        this.applyMainScreen(config);
+        await this.applyMainScreen(config);
 
         // Keep screen on
         this.requestWakeLock();
@@ -42,14 +42,19 @@ const App = {
         document.getElementById('btn-stop').addEventListener('click', () => Camera.stopRecording());
 
         // Back to main from admin
-        document.getElementById('btn-back-main').addEventListener('click', () => {
+        document.getElementById('btn-back-main').addEventListener('click', async () => {
             window.location.hash = '';
+            // Reset admin panel state so PIN is required next time
+            document.getElementById('pin-screen').hidden = false;
+            document.getElementById('admin-panel').hidden = true;
+            document.getElementById('pin-input').value = '';
+            document.getElementById('pin-error').textContent = '';
             this.showScreen('main');
             // Refresh main screen in case config changed
             const updatedConfig = Config.getAll();
             this.applyTheme(updatedConfig.theme, updatedConfig.customColors);
-            this.applyMainScreen(updatedConfig);
-            I18n.load(updatedConfig.language);
+            await this.applyMainScreen(updatedConfig);
+            await I18n.load(updatedConfig.language);
         });
     },
 
@@ -123,10 +128,11 @@ const App = {
         await new Promise(resolve => {
             const interval = setInterval(() => {
                 remaining--;
-                numberEl.textContent = remaining;
                 if (remaining <= 0) {
                     clearInterval(interval);
                     resolve();
+                } else {
+                    numberEl.textContent = remaining;
                 }
             }, 1000);
         });
