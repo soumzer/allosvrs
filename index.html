@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#000000">
+  <link rel="apple-touch-icon" href="assets/logos/Logo black.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <title>Allo Souvenirs</title>
+  <style>
+    @font-face {
+      font-family: 'Tangerine';
+      src: url(assets/fonts/Tangerine.otf);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Screen: Main -->
+  <section id="screen-main" class="screen active">
+    <div class="main-content">
+      <div class="main-photo-wrapper">
+        <img id="main-photo" class="main-photo" src="" alt="" hidden>
+      </div>
+      <div class="main-text-wrapper">
+        <h1 id="main-title" class="main-title">Bienvenue</h1>
+        <p id="main-subtitle" class="main-subtitle"></p>
+      </div>
+      <img id="main-logo" class="main-logo" src="" alt="" hidden>
+      <button id="btn-record" class="btn-record" data-i18n="record">Enregistrer un message</button>
+    </div>
+  </section>
+
+  <!-- Screen: Countdown -->
+  <section id="screen-countdown" class="screen">
+    <div class="countdown-content">
+      <p id="countdown-instruction" class="countdown-instruction" data-i18n="countdown_instruction">Décrochez le téléphone et attendez le bip</p>
+      <div id="countdown-number" class="countdown-number"></div>
+    </div>
+  </section>
+
+  <!-- Screen: Recording -->
+  <section id="screen-recording" class="screen">
+    <video id="recording-preview" autoplay playsinline muted></video>
+    <button id="btn-stop" class="btn-stop" data-i18n="stop">Arrêter</button>
+  </section>
+
+  <!-- Screen: Confirmation -->
+  <section id="screen-confirmation" class="screen">
+    <div class="confirmation-content">
+      <p id="confirmation-message" class="confirmation-message" data-i18n="confirmation">Vidéo enregistrée !</p>
+      <p id="confirmation-returning" class="confirmation-returning" data-i18n="returning">Retour automatique...</p>
+      <img class="confirmation-logo" src="assets/logos/Pastille white.png" alt="Allo Souvenirs">
+    </div>
+  </section>
+
+  <!-- Screen: Setup / Admin -->
+  <section id="screen-setup" class="screen">
+    <!-- PIN Screen -->
+    <div id="pin-screen" class="pin-screen">
+      <div class="pin-container">
+        <img class="pin-logo" src="assets/logos/Logo black.png" alt="Allo Souvenirs">
+        <h2>Administration</h2>
+        <form id="pin-form">
+          <input type="password" id="pin-input" maxlength="4" placeholder="Code PIN" inputmode="numeric" autocomplete="off">
+          <p id="pin-error" class="pin-error"></p>
+          <button type="submit" class="btn-pin">Accéder</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Admin Panel (hidden until PIN verified) -->
+    <div id="admin-panel" class="admin-panel" hidden>
+      <div class="admin-header">
+        <img class="admin-logo" src="assets/logos/Logo black.png" alt="Allo Souvenirs">
+        <h2>Configuration</h2>
+        <button id="btn-back-main" class="btn-small">← Retour</button>
+      </div>
+
+      <div class="setup-tabs">
+        <button class="setup-tab active" data-tab="event">Événement</button>
+        <button class="setup-tab" data-tab="appearance">Apparence</button>
+        <button class="setup-tab" data-tab="videos">Vidéos</button>
+      </div>
+
+      <!-- Event Tab -->
+      <div id="panel-event" class="setup-panel active">
+        <div class="form-group">
+          <label for="cfg-title">Texte principal</label>
+          <input type="text" id="cfg-title" placeholder="Ex: Mariage Alex & Camélia">
+        </div>
+        <div class="form-group">
+          <label for="cfg-subtitle">Texte secondaire (optionnel)</label>
+          <input type="text" id="cfg-subtitle" placeholder="Ex: 20 mars 2026">
+        </div>
+        <div class="form-group">
+          <label for="cfg-photo">Photo de présentation</label>
+          <input type="file" id="cfg-photo" accept="image/*">
+          <img id="preview-photo" class="preview-img" hidden>
+        </div>
+        <div class="form-group">
+          <label for="cfg-logo">Logo client (optionnel)</label>
+          <input type="file" id="cfg-logo" accept="image/*">
+          <img id="preview-logo" class="preview-img" hidden>
+        </div>
+        <div class="form-group">
+          <label for="cfg-text-position">Position du texte</label>
+          <select id="cfg-text-position">
+            <option value="above">Dessus la photo</option>
+            <option value="below" selected>Dessous la photo</option>
+            <option value="overlay">Superposé sur la photo</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="cfg-countdown">Durée du compte à rebours</label>
+          <select id="cfg-countdown">
+            <option value="5">5 secondes</option>
+            <option value="10">10 secondes</option>
+            <option value="15">15 secondes</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="cfg-language">Langue des invités</label>
+          <select id="cfg-language">
+            <option value="fr">Français</option>
+            <option value="en">English</option>
+            <option value="ar">العربية</option>
+          </select>
+        </div>
+        <div class="form-actions">
+          <button id="btn-preview" class="btn-action">Prévisualiser</button>
+          <button id="btn-save-event" class="btn-action btn-primary">Sauvegarder</button>
+          <span id="save-event-feedback" class="feedback"></span>
+        </div>
+      </div>
+
+      <!-- Appearance Tab -->
+      <div id="panel-appearance" class="setup-panel">
+        <div class="form-group">
+          <label for="cfg-theme">Thème de base</label>
+          <select id="cfg-theme">
+            <option value="mariage-classique">Mariage Classique</option>
+            <option value="mariage-luxe">Mariage Luxe</option>
+            <option value="baby-shower">Baby Shower</option>
+            <option value="corporate">Corporate</option>
+            <option value="festif">Festif</option>
+            <option value="marque">Marque / Lancement</option>
+            <option value="hotellerie">Hôtellerie</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="cfg-bg-color">Couleur du fond</label>
+          <input type="color" id="cfg-bg-color" value="#FFF8F0">
+        </div>
+        <div class="form-group">
+          <label for="cfg-text-color">Couleur du texte</label>
+          <input type="color" id="cfg-text-color" value="#5C4033">
+        </div>
+        <div class="form-group">
+          <label for="cfg-btn-color">Couleur des boutons</label>
+          <input type="color" id="cfg-btn-color" value="#C8A96E">
+        </div>
+        <div class="form-group">
+          <label for="cfg-accent-color">Couleur d'accent</label>
+          <input type="color" id="cfg-accent-color" value="#D4AF37">
+        </div>
+        <div class="form-actions">
+          <button id="btn-save-appearance" class="btn-action btn-primary">Sauvegarder</button>
+          <span id="save-appearance-feedback" class="feedback"></span>
+        </div>
+      </div>
+
+      <!-- Videos Tab -->
+      <div id="panel-videos" class="setup-panel">
+        <div class="videos-header">
+          <p id="video-count">0 vidéo(s)</p>
+          <div class="videos-actions">
+            <button id="btn-download-all" class="btn-action">Tout télécharger (ZIP)</button>
+            <button id="btn-delete-all" class="btn-action btn-danger">Tout supprimer</button>
+          </div>
+          <p id="export-progress" class="feedback"></p>
+        </div>
+        <div id="video-list" class="video-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <script src="js/storage.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/camera.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/app.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js');
+    }
+  </script>
+</body>
+</html>
