@@ -2,9 +2,6 @@
 
 const Config = {
     defaults: {
-        title: '',
-        subtitle: '',
-        textPosition: 'overlay',
         buttonPosition: 'bottom-center',
         countdownDuration: 5,
         maxRecording: 600,

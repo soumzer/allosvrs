@@ -81,9 +81,6 @@ const Admin = {
 
     loadEventConfig() {
         const config = Config.getAll();
-        document.getElementById('cfg-title').value = config.title || '';
-        document.getElementById('cfg-subtitle').value = config.subtitle || '';
-        document.getElementById('cfg-text-position').value = config.textPosition || 'below';
         document.getElementById('cfg-countdown').value = config.countdownDuration || 5;
         document.getElementById('cfg-max-recording').value = config.maxRecording || 600;
         document.getElementById('cfg-beep').value = config.beep || 'on';
@@ -149,9 +146,6 @@ const Admin = {
 
     async saveEventConfig() {
         const config = Config.getAll();
-        config.title = document.getElementById('cfg-title').value;
-        config.subtitle = document.getElementById('cfg-subtitle').value;
-        config.textPosition = document.getElementById('cfg-text-position').value;
         config.countdownDuration = parseInt(document.getElementById('cfg-countdown').value);
         config.maxRecording = parseInt(document.getElementById('cfg-max-recording').value);
         config.beep = document.getElementById('cfg-beep').value;

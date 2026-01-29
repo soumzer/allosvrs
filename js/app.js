@@ -109,21 +109,13 @@ const App = {
     },
 
     async applyMainScreen(config) {
-        // Title & subtitle
-        document.getElementById('main-title').textContent = config.title || '';
-        document.getElementById('main-subtitle').textContent = config.subtitle || '';
-
-        // Text position
+        // Button position
         const mainContent = document.querySelector('.main-content');
-        mainContent.classList.remove('text-above', 'text-below', 'text-overlay');
-        mainContent.classList.add('text-' + (config.textPosition || 'below'));
-
-        // Button position (for overlay mode)
         const positions = ['top-left','top-center','top-right','middle-left','middle-center','middle-right','bottom-left','bottom-center','bottom-right'];
         positions.forEach(p => mainContent.classList.remove('btn-pos-' + p));
         mainContent.classList.add('btn-pos-' + (config.buttonPosition || 'bottom-center'));
 
-        // Photo from IndexedDB
+        // Design photo from IndexedDB
         const photoEl = document.getElementById('main-photo');
         const photoBlob = await VideoStorage.getImage('event-photo');
         if (photoBlob) {

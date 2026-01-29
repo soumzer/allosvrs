@@ -75,25 +75,6 @@ body {
   border-radius: 8px;
 }
 
-.main-text-wrapper {
-  text-align: center;
-}
-
-.main-title {
-  font-family: var(--font-display, 'Tangerine', cursive);
-  font-size: 3.5rem;
-  color: var(--text-color);
-  margin: 0;
-}
-
-.main-subtitle {
-  font-size: 1.5rem;
-  color: var(--text-color);
-  opacity: 0.8;
-  margin: 0.25rem 0 0;
-}
-
-
 .btn-record {
   min-height: 70px;
   min-width: 280px;
@@ -115,25 +96,7 @@ body {
   opacity: 0.9;
 }
 
-/* Text position variants (applied to .main-content) */
-
-.text-above .main-text-wrapper {
-  order: 0;
-}
-
-.text-above .main-photo-wrapper {
-  order: 1;
-}
-
-.text-below .main-photo-wrapper {
-  order: 0;
-}
-
-.text-below .main-text-wrapper {
-  order: 1;
-}
-
-/* Overlay: photo covers full screen, text + button on top */
+/* Fullscreen design: photo covers entire screen, button on top */
 .text-overlay {
   position: relative;
 }
@@ -156,28 +119,6 @@ body {
   object-fit: cover;
   border-radius: 0;
 }
-
-.text-overlay .main-text-wrapper {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-}
-
-.text-overlay .main-title {
-  color: #fff;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
-}
-
-.text-overlay .main-subtitle {
-  color: #fff;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
-}
-
-.text-overlay .btn-record {
-  position: relative;
-  z-index: 2;
-}
-
 
 /* Invisible button in overlay mode */
 .text-overlay .btn-record {
@@ -647,10 +588,6 @@ body {
   flex-direction: row-reverse;
 }
 
-[dir="rtl"] .main-text-wrapper {
-  text-align: center;
-}
-
 [dir="rtl"] .video-row {
   flex-direction: row-reverse;
 }
@@ -665,18 +602,6 @@ body {
 
 /* Standard iPad (1024x768) */
 @media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
-  .main-title {
-    font-size: 3rem;
-  }
-
-  .main-subtitle {
-    font-size: 1.3rem;
-  }
-
-  .main-photo-wrapper {
-    max-height: 35vh;
-  }
-
   .btn-record {
     min-height: 60px;
     min-width: 260px;
@@ -694,15 +619,6 @@ body {
 
 /* Larger iPad / iPad Pro (1366x1024) */
 @media screen and (min-width: 1024px) and (max-width: 1400px) and (orientation: landscape) {
-  .main-title {
-    font-size: 3.5rem;
-  }
-
-  .main-photo-wrapper {
-    max-height: 40vh;
-    max-width: 55%;
-  }
-
   .admin-panel {
     padding: 2rem;
   }

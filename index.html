@@ -26,11 +26,7 @@
       <div class="main-photo-wrapper">
         <img id="main-photo" class="main-photo" src="" alt="" hidden>
       </div>
-      <div class="main-text-wrapper">
-        <h1 id="main-title" class="main-title"></h1>
-        <p id="main-subtitle" class="main-subtitle"></p>
-      </div>
-      <button id="btn-record" class="btn-record" data-i18n="record">Enregistrer un message</button>
+      <button id="btn-record" class="btn-record">Enregistrer</button>
     </div>
   </section>
 
@@ -90,29 +86,13 @@
       <!-- Event Tab -->
       <div id="panel-event" class="setup-panel active">
         <div class="form-group">
-          <label for="cfg-title">Texte principal</label>
-          <input type="text" id="cfg-title" placeholder="Ex: Mariage Alex & Camélia">
-        </div>
-        <div class="form-group">
-          <label for="cfg-subtitle">Texte secondaire (optionnel)</label>
-          <input type="text" id="cfg-subtitle" placeholder="Ex: 20 mars 2026">
-        </div>
-        <div class="form-group">
-          <label for="cfg-photo">Photo de présentation</label>
+          <label for="cfg-photo">Design de l'écran d'accueil</label>
           <input type="file" id="cfg-photo" accept="image/*">
           <img id="preview-photo" class="preview-img" hidden>
-          <button id="btn-delete-photo" class="btn-small btn-danger" hidden>Supprimer la photo</button>
+          <button id="btn-delete-photo" class="btn-small btn-danger" hidden>Supprimer</button>
         </div>
         <div class="form-group">
-          <label for="cfg-text-position">Position du texte</label>
-          <select id="cfg-text-position">
-            <option value="above">Dessus la photo</option>
-            <option value="below" selected>Dessous la photo</option>
-            <option value="overlay">Superposé sur la photo</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Position du bouton (mode superposé)</label>
+          <label>Position du bouton</label>
           <div id="btn-position-grid" class="btn-position-grid">
             <div class="grid-cell" data-pos="top-left"></div>
             <div class="grid-cell" data-pos="top-center"></div>
