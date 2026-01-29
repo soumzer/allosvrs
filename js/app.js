@@ -128,11 +128,10 @@ const App = {
         await new Promise(resolve => {
             const interval = setInterval(() => {
                 remaining--;
+                numberEl.textContent = remaining;
                 if (remaining <= 0) {
                     clearInterval(interval);
                     resolve();
-                } else {
-                    numberEl.textContent = remaining;
                 }
             }, 1000);
         });
@@ -140,10 +139,10 @@ const App = {
         // Play beep at end of countdown
         this.playBeep();
 
-        // Start camera in background, then show screen once ready
+        // Show recording screen first (black bg), then start camera
+        this.showScreen('recording');
         try {
             await Camera.startRecording();
-            this.showScreen('recording');
         } catch (e) {
             console.error('Camera error:', e);
             this.showScreen('main');

@@ -113,14 +113,6 @@ const Camera = {
 
         preview.srcObject = this.stream;
 
-        // Wait for video to actually start playing before returning
-        await new Promise(resolve => {
-            preview.onplaying = () => {
-                preview.onplaying = null;
-                resolve();
-            };
-        });
-
         this._orientationHandler = () => this._applyOrientationFix(preview);
         window.addEventListener('orientationchange', this._orientationHandler);
         window.addEventListener('resize', this._orientationHandler);
