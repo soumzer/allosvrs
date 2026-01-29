@@ -41,20 +41,6 @@ const App = {
         document.getElementById('btn-record').addEventListener('click', () => this.startCountdown());
         document.getElementById('btn-stop').addEventListener('click', () => Camera.stopRecording());
 
-        // 5-tap secret admin access on brand logo
-        this._tapCount = 0;
-        this._tapTimer = null;
-        document.getElementById('btn-admin-secret').addEventListener('click', () => {
-            this._tapCount++;
-            if (this._tapTimer) clearTimeout(this._tapTimer);
-            this._tapTimer = setTimeout(() => { this._tapCount = 0; }, 2000);
-            if (this._tapCount >= 5) {
-                this._tapCount = 0;
-                clearTimeout(this._tapTimer);
-                window.location.hash = '#setup';
-            }
-        });
-
         // Back to main from admin
         document.getElementById('btn-back-main').addEventListener('click', async () => {
             window.location.hash = '';
@@ -106,12 +92,10 @@ const App = {
         document.getElementById('main-title').textContent = config.title || '';
         document.getElementById('main-subtitle').textContent = config.subtitle || '';
 
-        // Text position (migrate legacy 'overlay' to 'below')
+        // Text position
         const mainContent = document.querySelector('.main-content');
-        mainContent.classList.remove('text-above', 'text-below', 'text-fullscreen');
-        let pos = config.textPosition || 'below';
-        if (pos === 'overlay') pos = 'below';
-        mainContent.classList.add('text-' + pos);
+        mainContent.classList.remove('text-above', 'text-below', 'text-overlay');
+        mainContent.classList.add('text-' + (config.textPosition || 'below'));
 
         // Photo from IndexedDB
         const photoEl = document.getElementById('main-photo');
@@ -144,10 +128,11 @@ const App = {
         await new Promise(resolve => {
             const interval = setInterval(() => {
                 remaining--;
-                numberEl.textContent = remaining;
                 if (remaining <= 0) {
                     clearInterval(interval);
                     resolve();
+                } else {
+                    numberEl.textContent = remaining;
                 }
             }, 1000);
         });

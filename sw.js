@@ -1,4 +1,4 @@
-const CACHE_NAME = 'allosvrs-v2';
+const CACHE_NAME = 'allosvrs-v1';
 const ASSETS = [
     './',
     './index.html',
@@ -15,7 +15,6 @@ const ASSETS = [
     './assets/fonts/Tangerine.otf',
     './assets/logos/Pastille black.png',
     './assets/logos/Pastille white.png',
-    './assets/logos/Pastille purple.png',
     './assets/logos/Logo black.png',
     './assets/logos/Logo white.png',
     './manifest.json'
