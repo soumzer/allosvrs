@@ -154,9 +154,15 @@ const App = {
             }, 1000);
         });
 
-        // Play beep at end of countdown (if enabled)
+        // Unlock audio context on user gesture (iOS requires this)
         if (Config.get('beep') !== 'off') {
-            this.playBeep();
+            this._audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            // Play silent buffer to unlock
+            const buf = this._audioCtx.createBuffer(1, 1, 22050);
+            const src = this._audioCtx.createBufferSource();
+            src.buffer = buf;
+            src.connect(this._audioCtx.destination);
+            src.start(0);
         }
 
         // Show recording screen first (black bg), then start camera
@@ -171,20 +177,25 @@ const App = {
 
     playBeep() {
         try {
-            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
+            const ctx = this._audioCtx;
+            if (!ctx) return;
+            const oscillator = ctx.createOscillator();
+            const gain = ctx.createGain();
             oscillator.connect(gain);
-            gain.connect(audioCtx.destination);
+            gain.connect(ctx.destination);
             oscillator.frequency.value = 800;
             gain.gain.value = 0.3;
             oscillator.start();
-            setTimeout(() => {
-                oscillator.stop();
-                audioCtx.close();
-            }, 300);
+            oscillator.stop(ctx.currentTime + 0.3);
         } catch (e) {
             // Audio not supported - continue without beep
+        }
+    },
+
+    cleanupAudio() {
+        if (this._audioCtx) {
+            this._audioCtx.close();
+            this._audioCtx = null;
         }
     },
 

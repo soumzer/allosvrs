@@ -68,6 +68,9 @@ const Camera = {
     async startRecording() {
         const preview = document.getElementById('recording-preview');
 
+        // Reset inline styles so CSS defaults (fullscreen) apply immediately
+        preview.removeAttribute('style');
+
         // Try to select the best front camera
         const deviceId = await this._getFrontCameraId();
 
@@ -160,8 +163,10 @@ const Camera = {
                 const sec = remaining % 60;
                 timerEl.textContent = `${min}:${String(sec).padStart(2, '0')}`;
 
-                if (remaining <= 10) {
+                if (remaining === 10) {
                     timerEl.classList.add('urgent');
+                    // Beep to signal last 10 seconds
+                    App.playBeep();
                 }
             }
 
@@ -232,6 +237,9 @@ const Camera = {
     },
 
     cleanup() {
+        // Cleanup audio
+        App.cleanupAudio();
+
         // Clear timer
         if (this._timerInterval) {
             clearInterval(this._timerInterval);
@@ -252,7 +260,5 @@ const Camera = {
         }
         const preview = document.getElementById('recording-preview');
         preview.srcObject = null;
-        // Don't clear transform/position/size styles
-        // They persist between recordings to avoid visual glitch
     }
 };
