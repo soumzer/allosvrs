@@ -140,10 +140,10 @@ const App = {
         // Play beep at end of countdown
         this.playBeep();
 
-        // Start recording
-        this.showScreen('recording');
+        // Start camera in background, then show screen once ready
         try {
             await Camera.startRecording();
+            this.showScreen('recording');
         } catch (e) {
             console.error('Camera error:', e);
             this.showScreen('main');
