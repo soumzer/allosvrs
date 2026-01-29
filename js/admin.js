@@ -29,6 +29,14 @@ const Admin = {
             document.getElementById('cfg-photo').value = '';
         });
 
+        // Button position grid
+        document.querySelectorAll('.grid-cell').forEach(cell => {
+            cell.addEventListener('click', () => {
+                document.querySelectorAll('.grid-cell').forEach(c => c.classList.remove('active'));
+                cell.classList.add('active');
+            });
+        });
+
         // Event buttons
         document.getElementById('btn-save-event').addEventListener('click', () => this.saveEventConfig());
         document.getElementById('btn-preview').addEventListener('click', () => this.previewEvent());
@@ -77,6 +85,12 @@ const Admin = {
         document.getElementById('cfg-text-position').value = config.textPosition || 'below';
         document.getElementById('cfg-countdown').value = config.countdownDuration || 5;
         document.getElementById('cfg-language').value = config.language || 'fr';
+
+        // Button position grid
+        const btnPos = config.buttonPosition || 'bottom-center';
+        document.querySelectorAll('.grid-cell').forEach(c => c.classList.remove('active'));
+        const activeCell = document.querySelector(`.grid-cell[data-pos="${btnPos}"]`);
+        if (activeCell) activeCell.classList.add('active');
 
         this.loadImagePreview('event-photo', 'preview-photo', 'btn-delete-photo');
     },
@@ -136,6 +150,8 @@ const Admin = {
         config.subtitle = document.getElementById('cfg-subtitle').value;
         config.textPosition = document.getElementById('cfg-text-position').value;
         config.countdownDuration = parseInt(document.getElementById('cfg-countdown').value);
+        const activeCell = document.querySelector('.grid-cell.active');
+        config.buttonPosition = activeCell ? activeCell.dataset.pos : 'bottom-center';
         config.language = document.getElementById('cfg-language').value;
         Config.saveAll(config);
 

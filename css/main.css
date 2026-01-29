@@ -206,6 +206,28 @@ body {
   opacity: 0.6;
 }
 
+/* Invisible button in overlay mode */
+.text-overlay .btn-record {
+  position: absolute;
+  z-index: 3;
+  background: transparent;
+  color: transparent;
+  border: none;
+  min-width: 250px;
+  min-height: 70px;
+}
+
+/* 9 button positions */
+.btn-pos-top-left .btn-record { top: 8%; left: 8%; }
+.btn-pos-top-center .btn-record { top: 8%; left: 50%; transform: translateX(-50%); }
+.btn-pos-top-right .btn-record { top: 8%; right: 8%; }
+.btn-pos-middle-left .btn-record { top: 50%; left: 8%; transform: translateY(-50%); }
+.btn-pos-middle-center .btn-record { top: 50%; left: 50%; transform: translate(-50%, -50%); }
+.btn-pos-middle-right .btn-record { top: 50%; right: 8%; transform: translateY(-50%); }
+.btn-pos-bottom-left .btn-record { bottom: 8%; left: 8%; }
+.btn-pos-bottom-center .btn-record { bottom: 8%; left: 50%; transform: translateX(-50%); }
+.btn-pos-bottom-right .btn-record { bottom: 8%; right: 8%; }
+
 /* --------------------------------------------------------------------------
    4. Countdown Screen (screen-countdown)
    -------------------------------------------------------------------------- */
@@ -490,6 +512,32 @@ body {
   margin-top: 0.5rem;
   border-radius: 8px;
   object-fit: contain;
+}
+
+/* Button position grid selector */
+
+.btn-position-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  width: 180px;
+  height: 120px;
+  margin-top: 0.5rem;
+}
+
+.grid-cell {
+  background: #e0e0e0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.grid-cell:hover {
+  background: #ccc;
+}
+
+.grid-cell.active {
+  background: #333;
 }
 
 /* Form Actions */

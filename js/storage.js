@@ -5,6 +5,7 @@ const Config = {
         title: 'Bienvenue',
         subtitle: '',
         textPosition: 'below',
+        buttonPosition: 'bottom-center',
         countdownDuration: 5,
         language: 'fr',
         theme: 'mariage-classique',
