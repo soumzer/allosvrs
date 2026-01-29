@@ -162,6 +162,10 @@ const Camera = {
         const reportsPortrait = (angle === 0 || angle === 180);
         const needsRotation = isStandalone && isActuallyLandscape && reportsPortrait;
 
+        // Force LTR to prevent RTL (Arabic) from shifting the video
+        videoEl.style.direction = 'ltr';
+        videoEl.style.margin = '0';
+        videoEl.style.padding = '0';
         videoEl.style.transformOrigin = 'center center';
 
         if (needsRotation) {
@@ -170,6 +174,7 @@ const Camera = {
             const vw = window.innerWidth;
             const vh = window.innerHeight;
             videoEl.style.position = 'fixed';
+            videoEl.style.inset = '0';
             videoEl.style.top = '50%';
             videoEl.style.left = '50%';
             videoEl.style.width = vh + 'px';
@@ -178,6 +183,10 @@ const Camera = {
             console.log(`[Camera] PWA rotation fix applied: rotate(-90deg), swapped to ${vh}x${vw}`);
         } else {
             // Safari or PWA with correct orientation: just mirror
+            videoEl.style.position = 'fixed';
+            videoEl.style.inset = '0';
+            videoEl.style.width = '100%';
+            videoEl.style.height = '100%';
             videoEl.style.transform = 'scaleX(-1)';
         }
 
