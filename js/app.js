@@ -127,12 +127,18 @@ const App = {
     },
 
     async startCountdown() {
+        // Unlock audio context immediately on user gesture (iOS requires this)
+        if (Config.get('beep') !== 'off') {
+            this._audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+
         // Check camera permission BEFORE countdown
         try {
             const testStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
             testStream.getTracks().forEach(t => t.stop());
         } catch (e) {
             console.error('Camera permission denied:', e);
+            this.cleanupAudio();
             window.location.reload();
             return;
         }
@@ -153,17 +159,6 @@ const App = {
                 }
             }, 1000);
         });
-
-        // Unlock audio context on user gesture (iOS requires this)
-        if (Config.get('beep') !== 'off') {
-            this._audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            // Play silent buffer to unlock
-            const buf = this._audioCtx.createBuffer(1, 1, 22050);
-            const src = this._audioCtx.createBufferSource();
-            src.buffer = buf;
-            src.connect(this._audioCtx.destination);
-            src.start(0);
-        }
 
         // Show recording screen first (black bg), then start camera
         this.showScreen('recording');
