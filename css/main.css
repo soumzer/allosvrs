@@ -117,7 +117,7 @@ body {
 
 /* Brand logo (bottom of main screen, discreet) */
 .brand-logo {
-  max-width: 180px;
+  max-width: 320px;
   opacity: 0.35;
   margin-top: 1.5rem;
   cursor: pointer;
