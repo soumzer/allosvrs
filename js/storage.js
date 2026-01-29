@@ -2,9 +2,9 @@
 
 const Config = {
     defaults: {
-        title: 'Bienvenue',
+        title: '',
         subtitle: '',
-        textPosition: 'below',
+        textPosition: 'overlay',
         buttonPosition: 'bottom-center',
         countdownDuration: 5,
         language: 'fr',

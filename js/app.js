@@ -21,6 +21,13 @@ const App = {
         // Keep screen on
         this.requestWakeLock();
 
+        // Block iOS elastic scroll (overscroll-behavior not enough on iOS Safari)
+        document.addEventListener('touchmove', (e) => {
+            if (!e.target.closest('.admin-panel')) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
         // Check for #setup hash
         if (window.location.hash === '#setup') {
             this.showScreen('setup');
