@@ -65,7 +65,7 @@ const VideoStorage = {
     async saveVideo(blob) {
         const now = new Date();
         const pad = (n) => String(n).padStart(2, '0');
-        const filename = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}_${pad(now.getHours())}h${pad(now.getMinutes())}.mp4`;
+        const filename = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}_${pad(now.getHours())}h${pad(now.getMinutes())}m${pad(now.getSeconds())}.mp4`;
         const record = { blob, filename, timestamp: now.toISOString() };
 
         return new Promise((resolve, reject) => {

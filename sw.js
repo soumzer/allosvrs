@@ -1,4 +1,4 @@
-const CACHE_NAME = 'allosvrs-v22';
+const CACHE_NAME = 'allosvrs-v23';
 const ASSETS = [
     './',
     './index.html',
@@ -9,6 +9,7 @@ const ASSETS = [
     './js/storage.js',
     './js/i18n.js',
     './js/admin.js',
+    './js/jszip.min.js',
     './locales/fr.json',
     './locales/en.json',
     './locales/ar.json',
