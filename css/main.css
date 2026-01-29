@@ -111,33 +111,7 @@ body {
   opacity: 0.9;
 }
 
-/* Brand logo (bottom of main screen, discreet) */
-.brand-logo {
-  position: absolute;
-  bottom: 1.5rem;
-  left: 50%;
-  transform: translateX(-50%);
-  max-width: 160px;
-  opacity: 0.35;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-
-.brand-logo:active {
-  opacity: 0.6;
-}
-
 /* Text position variants (applied to .main-content) */
-
-/* Button always last */
-.btn-record {
-  order: 10;
-}
-
-/* Brand logo after button */
-.brand-logo {
-  order: 11;
-}
 
 .text-above .main-text-wrapper {
   order: 0;
@@ -200,11 +174,6 @@ body {
   z-index: 2;
 }
 
-
-.text-overlay .brand-logo {
-  z-index: 2;
-  opacity: 0.6;
-}
 
 /* Invisible button in overlay mode */
 .text-overlay .btn-record {
