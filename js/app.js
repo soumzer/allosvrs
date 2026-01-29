@@ -85,19 +85,18 @@ const App = {
         document.body.className = '';
         document.body.classList.add(theme);
 
-        // Clear any inline custom property overrides first
-        const root = document.documentElement;
-        root.style.removeProperty('--bg-color');
-        root.style.removeProperty('--text-color');
-        root.style.removeProperty('--btn-color');
-        root.style.removeProperty('--accent-color');
+        // Clear any inline custom property overrides on body
+        document.body.style.removeProperty('--bg-color');
+        document.body.style.removeProperty('--text-color');
+        document.body.style.removeProperty('--btn-color');
+        document.body.style.removeProperty('--accent-color');
 
-        // Override with custom colors if set
+        // Override with custom colors on body (same element as theme CSS)
         if (customColors) {
-            if (customColors.bgColor) root.style.setProperty('--bg-color', customColors.bgColor);
-            if (customColors.textColor) root.style.setProperty('--text-color', customColors.textColor);
-            if (customColors.btnColor) root.style.setProperty('--btn-color', customColors.btnColor);
-            if (customColors.accentColor) root.style.setProperty('--accent-color', customColors.accentColor);
+            if (customColors.bgColor) document.body.style.setProperty('--bg-color', customColors.bgColor);
+            if (customColors.textColor) document.body.style.setProperty('--text-color', customColors.textColor);
+            if (customColors.btnColor) document.body.style.setProperty('--btn-color', customColors.btnColor);
+            if (customColors.accentColor) document.body.style.setProperty('--accent-color', customColors.accentColor);
         }
     },
 
@@ -108,8 +107,10 @@ const App = {
 
         // Text position
         const mainContent = document.querySelector('.main-content');
-        mainContent.classList.remove('text-above', 'text-below', 'text-overlay');
-        mainContent.classList.add('text-' + (config.textPosition || 'below'));
+        mainContent.classList.remove('text-above', 'text-below', 'text-fullscreen');
+        let pos = config.textPosition || 'below';
+        if (pos === 'overlay') pos = 'below';
+        mainContent.classList.add('text-' + pos);
 
         // Photo from IndexedDB
         const photoEl = document.getElementById('main-photo');
@@ -194,10 +195,17 @@ const App = {
         try {
             if ('wakeLock' in navigator) {
                 this.wakeLock = await navigator.wakeLock.request('screen');
-                // Re-acquire wake lock on visibility change
+                this.wakeLock.addEventListener('release', () => {
+                    this.wakeLock = null;
+                });
                 document.addEventListener('visibilitychange', async () => {
                     if (document.visibilityState === 'visible' && !this.wakeLock) {
-                        this.wakeLock = await navigator.wakeLock.request('screen');
+                        try {
+                            this.wakeLock = await navigator.wakeLock.request('screen');
+                            this.wakeLock.addEventListener('release', () => {
+                                this.wakeLock = null;
+                            });
+                        } catch (e) { /* ignore */ }
                     }
                 });
             }

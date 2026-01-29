@@ -142,7 +142,7 @@ const Admin = {
     },
 
     getThemeColor(prop) {
-        return getComputedStyle(document.documentElement).getPropertyValue(prop).trim();
+        return getComputedStyle(document.body).getPropertyValue(prop).trim();
     },
 
     rgbToHex(rgb) {
