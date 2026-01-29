@@ -117,9 +117,12 @@ body {
 
 /* Brand logo (bottom of main screen, discreet) */
 .brand-logo {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
   max-width: 320px;
   opacity: 0.35;
-  margin-top: auto;
   cursor: pointer;
   transition: opacity 0.2s;
 }
