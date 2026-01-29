@@ -146,35 +146,20 @@ const Camera = {
     _applyOrientationFix(videoEl) {
         let angle = 0;
 
-        if (screen.orientation && screen.orientation.angle !== undefined) {
-            angle = screen.orientation.angle;
-        } else if (window.orientation !== undefined) {
+        if (window.orientation !== undefined) {
             angle = window.orientation;
+        } else if (screen.orientation && screen.orientation.angle !== undefined) {
+            angle = screen.orientation.angle;
         }
 
-        // In PWA mode, iOS may not rotate the camera feed automatically
         const isStandalone = window.navigator.standalone === true ||
             window.matchMedia('(display-mode: standalone)').matches;
 
-        if (isStandalone) {
-            // Compensate rotation + keep mirror for front camera
-            // scaleX(-1) for mirror, rotate for orientation
-            videoEl.style.transform = `scaleX(-1) rotate(${-angle}deg)`;
+        // Just mirror for front camera - same behavior in Safari and PWA
+        // iOS handles camera orientation automatically in both modes
+        videoEl.style.transform = 'scaleX(-1)';
 
-            // If rotated 90/270, swap width/height to fill screen
-            if (angle === 90 || angle === -90 || angle === 270) {
-                videoEl.style.width = '100vh';
-                videoEl.style.height = '100vw';
-            } else {
-                videoEl.style.width = '100%';
-                videoEl.style.height = '100%';
-            }
-        } else {
-            // Normal Safari: just mirror
-            videoEl.style.transform = 'scaleX(-1)';
-            videoEl.style.width = '100%';
-            videoEl.style.height = '100%';
-        }
+        console.log(`[Camera] Orientation: ${angle}°, standalone: ${isStandalone}, transform: scaleX(-1)`);
 
         console.log(`[Camera] Orientation: ${angle}°, standalone: ${isStandalone}`);
     },
