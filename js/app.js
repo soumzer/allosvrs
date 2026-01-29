@@ -203,7 +203,7 @@ const App = {
         this.showScreen('confirmation');
         setTimeout(() => {
             this.showScreen('main');
-        }, 3000);
+        }, 5000);
     },
 
     async requestWakeLock() {
