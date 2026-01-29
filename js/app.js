@@ -47,6 +47,10 @@ const App = {
         // Button listeners
         document.getElementById('btn-record').addEventListener('click', () => this.startCountdown());
         document.getElementById('btn-stop').addEventListener('click', () => Camera.stopRecording());
+        document.getElementById('btn-pin-back').addEventListener('click', () => {
+            window.location.hash = '';
+            this.showScreen('main');
+        });
 
         // 5-tap secret admin access on main screen
         this._tapCount = 0;
