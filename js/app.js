@@ -135,6 +135,16 @@ const App = {
     },
 
     async startCountdown() {
+        // Check camera permission BEFORE countdown
+        try {
+            const testStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+            testStream.getTracks().forEach(t => t.stop());
+        } catch (e) {
+            console.error('Camera permission denied:', e);
+            this.showCameraError();
+            return;
+        }
+
         const duration = Config.get('countdownDuration');
         this.showScreen('countdown');
         const numberEl = document.getElementById('countdown-number');
@@ -182,6 +192,14 @@ const App = {
         } catch (e) {
             // Audio not supported - continue without beep
         }
+    },
+
+    showCameraError() {
+        const toast = document.getElementById('camera-error-toast');
+        toast.hidden = false;
+        setTimeout(() => {
+            toast.hidden = true;
+        }, 5000);
     },
 
     async onRecordingComplete(blob) {
