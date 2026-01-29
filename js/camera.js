@@ -6,6 +6,7 @@ const Camera = {
     _maxDuration: 600,
     _timerInterval: null,
     _elapsed: 0,
+    _cachedDeviceId: null,
 
     /**
      * Try to find the "normal" (non-wide-angle) front camera.
@@ -68,8 +69,8 @@ const Camera = {
         // Reset inline styles so CSS defaults (fullscreen) apply immediately
         preview.removeAttribute('style');
 
-        // Try to select the best front camera
-        const deviceId = await this._getFrontCameraId();
+        // Try to select the best front camera (use cached if available)
+        const deviceId = this._cachedDeviceId || await this._getFrontCameraId();
 
         // Build video constraints
         const videoConstraints = {
@@ -130,6 +131,10 @@ const Camera = {
                 const newTrack = this.stream.getVideoTracks()[0];
                 const newSettings = newTrack.getSettings();
                 console.log('[Camera] Switched. New settings:', JSON.stringify(newSettings));
+                this._cachedDeviceId = betterDeviceId;
+            } else if (betterDeviceId) {
+                // Already on the right camera, cache it
+                this._cachedDeviceId = settings.deviceId;
             }
         }
 
