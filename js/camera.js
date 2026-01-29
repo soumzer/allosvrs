@@ -3,6 +3,9 @@ const Camera = {
     recorder: null,
     chunks: [],
     _orientationHandler: null,
+    _maxDuration: 10 * 60, // 10 minutes in seconds
+    _timerInterval: null,
+    _elapsed: 0,
 
     /**
      * Try to find the "normal" (non-wide-angle) front camera.
@@ -137,6 +140,34 @@ const Camera = {
         };
 
         this.recorder.start(1000);
+
+        // Start max duration timer
+        this._elapsed = 0;
+        const timerEl = document.getElementById('recording-timer');
+        timerEl.textContent = '';
+        timerEl.className = 'recording-timer';
+        timerEl.hidden = true;
+
+        this._timerInterval = setInterval(() => {
+            this._elapsed++;
+            const remaining = this._maxDuration - this._elapsed;
+
+            if (remaining <= 60) {
+                // Show timer in last minute
+                timerEl.hidden = false;
+                const min = Math.floor(remaining / 60);
+                const sec = remaining % 60;
+                timerEl.textContent = `${min}:${String(sec).padStart(2, '0')}`;
+
+                if (remaining <= 10) {
+                    timerEl.classList.add('urgent');
+                }
+            }
+
+            if (remaining <= 0) {
+                this.stopRecording();
+            }
+        }, 1000);
     },
 
     /**
@@ -200,6 +231,14 @@ const Camera = {
     },
 
     cleanup() {
+        // Clear timer
+        if (this._timerInterval) {
+            clearInterval(this._timerInterval);
+            this._timerInterval = null;
+        }
+        const timerEl = document.getElementById('recording-timer');
+        timerEl.hidden = true;
+
         // Remove orientation listeners
         if (this._orientationHandler) {
             window.removeEventListener('orientationchange', this._orientationHandler);
