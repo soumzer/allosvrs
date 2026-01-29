@@ -141,7 +141,7 @@ const App = {
             testStream.getTracks().forEach(t => t.stop());
         } catch (e) {
             console.error('Camera permission denied:', e);
-            this.showCameraError();
+            window.location.reload();
             return;
         }
 
@@ -192,14 +192,6 @@ const App = {
         } catch (e) {
             // Audio not supported - continue without beep
         }
-    },
-
-    showCameraError() {
-        const toast = document.getElementById('camera-error-toast');
-        toast.hidden = false;
-        setTimeout(() => {
-            toast.hidden = true;
-        }, 5000);
     },
 
     async onRecordingComplete(blob) {
