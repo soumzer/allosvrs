@@ -136,17 +136,6 @@ const App = {
             this._audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         }
 
-        // Check camera permission BEFORE countdown
-        try {
-            const testStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-            testStream.getTracks().forEach(t => t.stop());
-        } catch (e) {
-            console.error('Camera permission denied:', e);
-            this.cleanupAudio();
-            window.location.reload();
-            return;
-        }
-
         const duration = Config.get('countdownDuration');
         this.showScreen('countdown');
         const numberEl = document.getElementById('countdown-number');
@@ -170,7 +159,8 @@ const App = {
             await Camera.startRecording();
         } catch (e) {
             console.error('Camera error:', e);
-            this.showScreen('main');
+            this.cleanupAudio();
+            window.location.reload();
         }
     },
 

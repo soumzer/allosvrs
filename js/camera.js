@@ -14,10 +14,7 @@ const Camera = {
      */
     async _getFrontCameraId() {
         try {
-            // Need a temporary stream to get labels (iOS requires permission first)
-            const tempStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-            tempStream.getTracks().forEach(t => t.stop());
-
+            // Try enumerateDevices directly (labels available if permission already granted)
             const devices = await navigator.mediaDevices.enumerateDevices();
             const videoInputs = devices.filter(d => d.kind === 'videoinput');
 
