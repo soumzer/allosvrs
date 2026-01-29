@@ -23,16 +23,28 @@ const Camera = {
                 console.log(`[Camera]   ${i}: "${d.label}" (${d.deviceId.slice(0, 8)}...)`);
             });
 
-            // Look for front cameras
+            // Look for front cameras (EN: "front", FR: "avant")
+            const label = d => d.label.toLowerCase();
             const frontCams = videoInputs.filter(d =>
-                d.label.toLowerCase().includes('front')
+                label(d).includes('front') || label(d).includes('avant')
             );
 
-            if (frontCams.length >= 2) {
-                // iPad Pro with 2 front cameras: pick the non-wide one
-                const normalCam = frontCams.find(d =>
-                    !d.label.toLowerCase().includes('wide') &&
-                    !d.label.toLowerCase().includes('ultra')
+            // Exclude back cameras (EN: "back"/"rear", FR: "arrière")
+            const frontOnly = frontCams.filter(d =>
+                !label(d).includes('back') &&
+                !label(d).includes('rear') &&
+                !label(d).includes('arrière') &&
+                !label(d).includes('arriere')
+            );
+
+            console.log('[Camera] Front cameras found:', frontOnly.map(d => d.label));
+
+            if (frontOnly.length >= 2) {
+                // iPad with 2 front cameras: pick the normal one (not ultra/wide/grand angle)
+                const normalCam = frontOnly.find(d =>
+                    !label(d).includes('wide') &&
+                    !label(d).includes('ultra') &&
+                    !label(d).includes('grand angle')
                 );
                 if (normalCam) {
                     console.log('[Camera] Selected normal front camera:', normalCam.label);
@@ -40,9 +52,9 @@ const Camera = {
                 }
             }
 
-            if (frontCams.length === 1) {
-                console.log('[Camera] Single front camera:', frontCams[0].label);
-                return frontCams[0].deviceId;
+            if (frontOnly.length === 1) {
+                console.log('[Camera] Single front camera:', frontOnly[0].label);
+                return frontOnly[0].deviceId;
             }
         } catch (e) {
             console.log('[Camera] enumerateDevices failed, using facingMode fallback');
