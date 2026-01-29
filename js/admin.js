@@ -44,6 +44,7 @@ const Admin = {
         // Appearance
         document.getElementById('cfg-theme').addEventListener('change', () => this.onThemeChange());
         document.getElementById('btn-save-appearance').addEventListener('click', () => this.saveAppearanceConfig());
+        document.getElementById('btn-extract-colors').addEventListener('click', () => this.extractColorsFromPhoto());
 
         // Videos
         document.getElementById('btn-download-all').addEventListener('click', () => this.downloadAllZip());
@@ -224,6 +225,92 @@ const Admin = {
         requestAnimationFrame(() => {
             this.syncColorPickersToTheme();
         });
+    },
+
+    async extractColorsFromPhoto() {
+        const feedback = document.getElementById('extract-colors-feedback');
+        const blob = await VideoStorage.getImage('event-photo');
+        if (!blob) {
+            feedback.textContent = 'Aucune photo uploadée';
+            setTimeout(() => { feedback.textContent = ''; }, 2000);
+            return;
+        }
+
+        feedback.textContent = 'Analyse en cours...';
+
+        const colors = await new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const size = 50;
+                canvas.width = size;
+                canvas.height = size;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, size, size);
+                URL.revokeObjectURL(img.src);
+
+                const data = ctx.getImageData(0, 0, size, size).data;
+                const colorMap = {};
+
+                // Quantize pixels into buckets and count
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = Math.round(data[i] / 32) * 32;
+                    const g = Math.round(data[i + 1] / 32) * 32;
+                    const b = Math.round(data[i + 2] / 32) * 32;
+                    const key = `${r},${g},${b}`;
+                    colorMap[key] = (colorMap[key] || 0) + 1;
+                }
+
+                // Sort by frequency
+                const sorted = Object.entries(colorMap)
+                    .sort((a, b) => b[1] - a[1])
+                    .map(([key]) => {
+                        const [r, g, b] = key.split(',').map(Number);
+                        return { r, g, b, lum: 0.299 * r + 0.587 * g + 0.114 * b };
+                    });
+
+                // Pick distinct colors (min distance 60)
+                const palette = [];
+                for (const c of sorted) {
+                    if (palette.every(p => Math.abs(p.r - c.r) + Math.abs(p.g - c.g) + Math.abs(p.b - c.b) > 60)) {
+                        palette.push(c);
+                    }
+                    if (palette.length >= 5) break;
+                }
+
+                const toHex = ({ r, g, b }) => '#' + [r, g, b].map(v => Math.min(255, v).toString(16).padStart(2, '0')).join('');
+
+                // bg = most frequent color
+                const bg = palette[0];
+
+                // text = most contrast to bg (furthest luminance)
+                const rest = palette.slice(1);
+                rest.sort((a, b) => Math.abs(b.lum - bg.lum) - Math.abs(a.lum - bg.lum));
+                const text = rest[0] || { r: bg.lum > 128 ? 0 : 255, g: bg.lum > 128 ? 0 : 255, b: bg.lum > 128 ? 0 : 255 };
+
+                // btn and accent from remaining
+                const others = rest.slice(1);
+                const btn = others[0] || text;
+                const accent = others[1] || others[0] || text;
+
+                resolve({
+                    bgColor: toHex(bg),
+                    textColor: toHex(text),
+                    btnColor: toHex(btn),
+                    accentColor: toHex(accent)
+                });
+            };
+            img.src = URL.createObjectURL(blob);
+        });
+
+        // Apply to color pickers
+        document.getElementById('cfg-bg-color').value = colors.bgColor;
+        document.getElementById('cfg-text-color').value = colors.textColor;
+        document.getElementById('cfg-btn-color').value = colors.btnColor;
+        document.getElementById('cfg-accent-color').value = colors.accentColor;
+
+        feedback.textContent = 'Couleurs extraites !';
+        setTimeout(() => { feedback.textContent = ''; }, 2000);
     },
 
     saveAppearanceConfig() {

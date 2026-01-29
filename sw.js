@@ -1,4 +1,4 @@
-const CACHE_NAME = 'allosvrs-v3';
+const CACHE_NAME = 'allosvrs-v4';
 const ASSETS = [
     './',
     './index.html',
