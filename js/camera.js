@@ -155,13 +155,32 @@ const Camera = {
         const isStandalone = window.navigator.standalone === true ||
             window.matchMedia('(display-mode: standalone)').matches;
 
-        // Just mirror for front camera - same behavior in Safari and PWA
-        // iOS handles camera orientation automatically in both modes
-        videoEl.style.transform = 'scaleX(-1)';
+        // Detect actual landscape by screen dimensions
+        // iOS PWA may report 0° even when physically in landscape
+        const isActuallyLandscape = window.innerWidth > window.innerHeight;
+        const reportsPortrait = (angle === 0 || angle === 180);
+        const needsRotation = isStandalone && isActuallyLandscape && reportsPortrait;
 
-        console.log(`[Camera] Orientation: ${angle}°, standalone: ${isStandalone}, transform: scaleX(-1)`);
+        videoEl.style.transformOrigin = 'center center';
 
-        console.log(`[Camera] Orientation: ${angle}°, standalone: ${isStandalone}`);
+        if (needsRotation) {
+            // PWA bug: screen is landscape but iOS reports portrait
+            // Camera feed comes in portrait, we need to rotate to landscape
+            const vw = window.innerWidth;
+            const vh = window.innerHeight;
+            videoEl.style.position = 'fixed';
+            videoEl.style.top = '50%';
+            videoEl.style.left = '50%';
+            videoEl.style.width = vh + 'px';
+            videoEl.style.height = vw + 'px';
+            videoEl.style.transform = 'translate(-50%, -50%) rotate(-90deg) scaleX(-1)';
+            console.log(`[Camera] PWA rotation fix applied: rotate(-90deg), swapped to ${vh}x${vw}`);
+        } else {
+            // Safari or PWA with correct orientation: just mirror
+            videoEl.style.transform = 'scaleX(-1)';
+        }
+
+        console.log(`[Camera] Orientation: ${angle}°, standalone: ${isStandalone}, landscape: ${isActuallyLandscape}, needsRotation: ${needsRotation}`);
     },
 
     stopRecording() {
