@@ -41,6 +41,20 @@ const App = {
         document.getElementById('btn-record').addEventListener('click', () => this.startCountdown());
         document.getElementById('btn-stop').addEventListener('click', () => Camera.stopRecording());
 
+        // 5-tap secret admin access on brand logo
+        this._tapCount = 0;
+        this._tapTimer = null;
+        document.getElementById('btn-admin-secret').addEventListener('click', () => {
+            this._tapCount++;
+            if (this._tapTimer) clearTimeout(this._tapTimer);
+            this._tapTimer = setTimeout(() => { this._tapCount = 0; }, 2000);
+            if (this._tapCount >= 5) {
+                this._tapCount = 0;
+                clearTimeout(this._tapTimer);
+                window.location.hash = '#setup';
+            }
+        });
+
         // Back to main from admin
         document.getElementById('btn-back-main').addEventListener('click', async () => {
             window.location.hash = '';

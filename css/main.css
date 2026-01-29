@@ -115,11 +115,29 @@ body {
   opacity: 0.9;
 }
 
+/* Brand logo (bottom of main screen, discreet) */
+.brand-logo {
+  max-height: 32px;
+  opacity: 0.35;
+  margin-top: 1.5rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.brand-logo:active {
+  opacity: 0.6;
+}
+
 /* Text position variants (applied to .main-content) */
 
 /* Button always last */
 .btn-record {
   order: 10;
+}
+
+/* Brand logo after button */
+.brand-logo {
+  order: 11;
 }
 
 /* Logo always second to last */
