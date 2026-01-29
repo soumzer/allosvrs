@@ -202,8 +202,7 @@ const Camera = {
         }
         const preview = document.getElementById('recording-preview');
         preview.srcObject = null;
-        preview.style.transform = '';
-        preview.style.width = '';
-        preview.style.height = '';
+        // Don't clear transform/position/size styles
+        // They persist between recordings to avoid visual glitch
     }
 };
