@@ -111,6 +111,28 @@ const Camera = {
         console.log('[Camera] Actual settings:', JSON.stringify(settings));
         console.log(`[Camera] Resolution: ${settings.width}x${settings.height} @ ${settings.frameRate}fps`);
 
+        // If we couldn't identify cameras before (no labels), check now and switch if needed
+        if (!deviceId) {
+            const betterDeviceId = await this._getFrontCameraId();
+            if (betterDeviceId && betterDeviceId !== settings.deviceId) {
+                console.log('[Camera] Switching to correct front camera:', betterDeviceId);
+                this.stream.getTracks().forEach(t => t.stop());
+                const betterConstraints = {
+                    frameRate: { ideal: 30, max: 30 },
+                    width: { ideal: 1920 },
+                    height: { ideal: 1080 }
+                };
+                betterConstraints.deviceId = { exact: betterDeviceId };
+                this.stream = await navigator.mediaDevices.getUserMedia({
+                    video: betterConstraints,
+                    audio: true
+                });
+                const newTrack = this.stream.getVideoTracks()[0];
+                const newSettings = newTrack.getSettings();
+                console.log('[Camera] Switched. New settings:', JSON.stringify(newSettings));
+            }
+        }
+
         // Fix PWA rotation BEFORE showing the stream
         this._applyOrientationFix(preview);
 
