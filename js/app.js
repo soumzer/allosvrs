@@ -107,10 +107,8 @@ const App = {
 
         // Text position
         const mainContent = document.querySelector('.main-content');
-        mainContent.classList.remove('text-above', 'text-below', 'text-fullscreen');
-        let pos = config.textPosition || 'below';
-        if (pos === 'overlay') pos = 'below';
-        mainContent.classList.add('text-' + pos);
+        mainContent.classList.remove('text-above', 'text-below', 'text-overlay');
+        mainContent.classList.add('text-' + (config.textPosition || 'below'));
 
         // Photo from IndexedDB
         const photoEl = document.getElementById('main-photo');

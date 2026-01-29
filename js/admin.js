@@ -90,8 +90,34 @@ const Admin = {
         document.getElementById(inputId).addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (!file) return;
-            await VideoStorage.saveImage(imageKey, file);
+            const resized = await this.resizeImage(file, 1920);
+            await VideoStorage.saveImage(imageKey, resized);
             this.loadImagePreview(imageKey, previewId);
+        });
+    },
+
+    resizeImage(file, maxDim) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => {
+                const w = img.naturalWidth;
+                const h = img.naturalHeight;
+                // No resize needed if already small enough
+                if (w <= maxDim && h <= maxDim) {
+                    URL.revokeObjectURL(img.src);
+                    resolve(file);
+                    return;
+                }
+                const scale = maxDim / Math.max(w, h);
+                const canvas = document.createElement('canvas');
+                canvas.width = Math.round(w * scale);
+                canvas.height = Math.round(h * scale);
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                URL.revokeObjectURL(img.src);
+                canvas.toBlob((blob) => resolve(blob), 'image/jpeg', 0.85);
+            };
+            img.src = URL.createObjectURL(file);
         });
     },
 
