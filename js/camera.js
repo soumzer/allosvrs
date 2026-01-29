@@ -3,7 +3,7 @@ const Camera = {
     recorder: null,
     chunks: [],
     _orientationHandler: null,
-    _maxDuration: 10 * 60, // 10 minutes in seconds
+    _maxDuration: 600,
     _timerInterval: null,
     _elapsed: 0,
 
@@ -142,6 +142,7 @@ const Camera = {
         this.recorder.start(1000);
 
         // Start max duration timer
+        this._maxDuration = Config.get('maxRecording') || 600;
         this._elapsed = 0;
         const timerEl = document.getElementById('recording-timer');
         timerEl.textContent = '';

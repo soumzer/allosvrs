@@ -85,6 +85,8 @@ const Admin = {
         document.getElementById('cfg-subtitle').value = config.subtitle || '';
         document.getElementById('cfg-text-position').value = config.textPosition || 'below';
         document.getElementById('cfg-countdown').value = config.countdownDuration || 5;
+        document.getElementById('cfg-max-recording').value = config.maxRecording || 600;
+        document.getElementById('cfg-beep').value = config.beep || 'on';
         document.getElementById('cfg-language').value = config.language || 'fr';
 
         // Button position grid
@@ -151,6 +153,8 @@ const Admin = {
         config.subtitle = document.getElementById('cfg-subtitle').value;
         config.textPosition = document.getElementById('cfg-text-position').value;
         config.countdownDuration = parseInt(document.getElementById('cfg-countdown').value);
+        config.maxRecording = parseInt(document.getElementById('cfg-max-recording').value);
+        config.beep = document.getElementById('cfg-beep').value;
         const activeCell = document.querySelector('.grid-cell.active');
         config.buttonPosition = activeCell ? activeCell.dataset.pos : 'bottom-center';
         config.language = document.getElementById('cfg-language').value;

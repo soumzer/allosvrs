@@ -7,6 +7,8 @@ const Config = {
         textPosition: 'overlay',
         buttonPosition: 'bottom-center',
         countdownDuration: 5,
+        maxRecording: 600,
+        beep: 'on',
         language: 'fr',
         theme: 'mariage-classique',
         customColors: null,

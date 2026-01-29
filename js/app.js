@@ -162,8 +162,10 @@ const App = {
             }, 1000);
         });
 
-        // Play beep at end of countdown
-        this.playBeep();
+        // Play beep at end of countdown (if enabled)
+        if (Config.get('beep') !== 'off') {
+            this.playBeep();
+        }
 
         // Show recording screen first (black bg), then start camera
         this.showScreen('recording');
