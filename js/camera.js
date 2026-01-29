@@ -108,10 +108,10 @@ const Camera = {
         console.log('[Camera] Actual settings:', JSON.stringify(settings));
         console.log(`[Camera] Resolution: ${settings.width}x${settings.height} @ ${settings.frameRate}fps`);
 
-        preview.srcObject = this.stream;
-
-        // Fix PWA rotation
+        // Fix PWA rotation BEFORE showing the stream (avoids visual glitch)
         this._applyOrientationFix(preview);
+
+        preview.srcObject = this.stream;
         this._orientationHandler = () => this._applyOrientationFix(preview);
         window.addEventListener('orientationchange', this._orientationHandler);
         window.addEventListener('resize', this._orientationHandler);
