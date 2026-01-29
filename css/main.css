@@ -121,7 +121,7 @@ body {
   bottom: 1.5rem;
   left: 50%;
   transform: translateX(-50%);
-  max-width: 320px;
+  max-width: 160px;
   opacity: 0.35;
   cursor: pointer;
   transition: opacity 0.2s;
