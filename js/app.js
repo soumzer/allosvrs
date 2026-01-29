@@ -119,16 +119,6 @@ const App = {
         } else {
             photoEl.hidden = true;
         }
-
-        // Logo from IndexedDB
-        const logoEl = document.getElementById('main-logo');
-        const logoBlob = await VideoStorage.getImage('event-logo');
-        if (logoBlob) {
-            logoEl.src = URL.createObjectURL(logoBlob);
-            logoEl.hidden = false;
-        } else {
-            logoEl.hidden = true;
-        }
     },
 
     async startCountdown() {

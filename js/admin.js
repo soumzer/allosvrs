@@ -20,7 +20,14 @@ const Admin = {
 
         // File uploads
         this.setupFileUpload('cfg-photo', 'event-photo', 'preview-photo');
-        this.setupFileUpload('cfg-logo', 'event-logo', 'preview-logo');
+
+        // Delete photo button
+        document.getElementById('btn-delete-photo').addEventListener('click', async () => {
+            await VideoStorage.deleteImage('event-photo');
+            document.getElementById('preview-photo').hidden = true;
+            document.getElementById('btn-delete-photo').hidden = true;
+            document.getElementById('cfg-photo').value = '';
+        });
 
         // Event buttons
         document.getElementById('btn-save-event').addEventListener('click', () => this.saveEventConfig());
@@ -71,18 +78,20 @@ const Admin = {
         document.getElementById('cfg-countdown').value = config.countdownDuration || 5;
         document.getElementById('cfg-language').value = config.language || 'fr';
 
-        this.loadImagePreview('event-photo', 'preview-photo');
-        this.loadImagePreview('event-logo', 'preview-logo');
+        this.loadImagePreview('event-photo', 'preview-photo', 'btn-delete-photo');
     },
 
-    async loadImagePreview(key, previewId) {
+    async loadImagePreview(key, previewId, deleteBtnId) {
         const blob = await VideoStorage.getImage(key);
         const el = document.getElementById(previewId);
+        const delBtn = deleteBtnId ? document.getElementById(deleteBtnId) : null;
         if (blob) {
             el.src = URL.createObjectURL(blob);
             el.hidden = false;
+            if (delBtn) delBtn.hidden = false;
         } else {
             el.hidden = true;
+            if (delBtn) delBtn.hidden = true;
         }
     },
 
@@ -92,7 +101,7 @@ const Admin = {
             if (!file) return;
             const resized = await this.resizeImage(file, 1920);
             await VideoStorage.saveImage(imageKey, resized);
-            this.loadImagePreview(imageKey, previewId);
+            this.loadImagePreview(imageKey, previewId, imageKey === 'event-photo' ? 'btn-delete-photo' : null);
         });
     },
 

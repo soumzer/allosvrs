@@ -30,7 +30,6 @@
         <h1 id="main-title" class="main-title">Bienvenue</h1>
         <p id="main-subtitle" class="main-subtitle"></p>
       </div>
-      <img id="main-logo" class="main-logo" src="" alt="" hidden>
       <button id="btn-record" class="btn-record" data-i18n="record">Enregistrer un message</button>
       <img id="btn-admin-secret" class="brand-logo" src="assets/logos/Logo purple.png" alt="Allo Souvenirs">
     </div>
@@ -102,11 +101,7 @@
           <label for="cfg-photo">Photo de présentation</label>
           <input type="file" id="cfg-photo" accept="image/*">
           <img id="preview-photo" class="preview-img" hidden>
-        </div>
-        <div class="form-group">
-          <label for="cfg-logo">Logo client (optionnel)</label>
-          <input type="file" id="cfg-logo" accept="image/*">
-          <img id="preview-logo" class="preview-img" hidden>
+          <button id="btn-delete-photo" class="btn-small btn-danger" hidden>Supprimer la photo</button>
         </div>
         <div class="form-group">
           <label for="cfg-text-position">Position du texte</label>

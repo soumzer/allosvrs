@@ -89,10 +89,6 @@ body {
   margin: 0.25rem 0 0;
 }
 
-.main-logo {
-  max-height: 80px;
-  margin-top: auto;
-}
 
 .btn-record {
   min-height: 70px;
@@ -141,11 +137,6 @@ body {
 /* Brand logo after button */
 .brand-logo {
   order: 11;
-}
-
-/* Logo always second to last */
-.main-logo {
-  order: 9;
 }
 
 .text-above .main-text-wrapper {
@@ -209,13 +200,8 @@ body {
   z-index: 2;
 }
 
-.text-overlay .main-logo {
-  position: relative;
-  z-index: 2;
-}
 
 .text-overlay .brand-logo {
-  position: relative;
   z-index: 2;
   opacity: 0.6;
 }
