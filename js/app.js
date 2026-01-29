@@ -41,6 +41,21 @@ const App = {
         document.getElementById('btn-record').addEventListener('click', () => this.startCountdown());
         document.getElementById('btn-stop').addEventListener('click', () => Camera.stopRecording());
 
+        // 5-tap secret admin access on main screen
+        this._tapCount = 0;
+        this._tapTimer = null;
+        document.getElementById('screen-main').addEventListener('click', (e) => {
+            if (e.target.closest('.btn-record')) return;
+            this._tapCount++;
+            if (this._tapTimer) clearTimeout(this._tapTimer);
+            this._tapTimer = setTimeout(() => { this._tapCount = 0; }, 2000);
+            if (this._tapCount >= 5) {
+                this._tapCount = 0;
+                clearTimeout(this._tapTimer);
+                window.location.hash = '#setup';
+            }
+        });
+
         // Back to main from admin
         document.getElementById('btn-back-main').addEventListener('click', async () => {
             window.location.hash = '';
