@@ -7,7 +7,7 @@ const I18n = {
             const response = await fetch(`locales/${lang}.json`);
             this.translations = await response.json();
             this.currentLang = lang;
-            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            document.documentElement.dir = (lang === 'ar' || lang === 'ur') ? 'rtl' : 'ltr';
             document.documentElement.lang = lang;
             this.apply();
         } catch (e) {
