@@ -392,14 +392,20 @@ const Admin = {
             let currentPart = [];
             let currentSize = 0;
 
+            const totalBytes = videos.reduce((sum, v) => sum + (v.blob.size || 0), 0);
+            const totalMB = (totalBytes / (1024 * 1024)).toFixed(1);
+            progress.textContent = `${videos.length} vidéos, ${totalMB} Mo au total`;
+            console.log('[ZIP] Videos:', videos.map(v => `${v.filename}: ${(v.blob.size / (1024 * 1024)).toFixed(1)} Mo`));
+
             videos.forEach(v => {
-                if (currentPart.length > 0 && currentSize + v.blob.size > MAX_ZIP_BYTES) {
+                const size = v.blob.size || 0;
+                if (currentPart.length > 0 && currentSize + size > MAX_ZIP_BYTES) {
                     parts.push(currentPart);
                     currentPart = [];
                     currentSize = 0;
                 }
                 currentPart.push(v);
-                currentSize += v.blob.size;
+                currentSize += size;
             });
             if (currentPart.length > 0) parts.push(currentPart);
 
