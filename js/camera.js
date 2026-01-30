@@ -163,7 +163,18 @@ const Camera = {
         this.recorder.onstop = () => {
             const blob = new Blob(this.chunks, { type: this.recorder.mimeType });
             this.cleanup();
-            App.onRecordingComplete(blob);
+            if (blob.size > 0) {
+                App.onRecordingComplete(blob);
+            } else {
+                console.warn('[Camera] Empty recording discarded');
+                App.showScreen('main');
+            }
+        };
+
+        this.recorder.onerror = (e) => {
+            console.error('[Camera] Recorder error:', e.error);
+            this.cleanup();
+            App.showScreen('main');
         };
 
         this.recorder.start(1000);
