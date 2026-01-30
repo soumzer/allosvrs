@@ -385,21 +385,49 @@ const Admin = {
         if (videos.length === 0) return;
 
         const progress = document.getElementById('export-progress');
-        progress.textContent = 'Préparation du ZIP...';
+        const MAX_ZIP_BYTES = 300 * 1024 * 1024; // 300 MB per zip
 
         try {
-            const zip = new JSZip();
+            let parts = [];
+            let currentPart = [];
+            let currentSize = 0;
+
             videos.forEach(v => {
-                zip.file(v.filename, v.blob);
+                if (currentPart.length > 0 && currentSize + v.blob.size > MAX_ZIP_BYTES) {
+                    parts.push(currentPart);
+                    currentPart = [];
+                    currentSize = 0;
+                }
+                currentPart.push(v);
+                currentSize += v.blob.size;
             });
-            const content = await zip.generateAsync({ type: 'blob' });
-            const url = URL.createObjectURL(content);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'allo-souvenirs-videos.zip';
-            a.click();
-            URL.revokeObjectURL(url);
-            progress.textContent = 'ZIP téléchargé !';
+            if (currentPart.length > 0) parts.push(currentPart);
+
+            for (let i = 0; i < parts.length; i++) {
+                const label = parts.length > 1 ? ` (${i + 1}/${parts.length})` : '';
+                progress.textContent = `Préparation du ZIP${label}...`;
+
+                const zip = new JSZip();
+                parts[i].forEach(v => zip.file(v.filename, v.blob));
+                const content = await zip.generateAsync({ type: 'blob' });
+
+                const suffix = parts.length > 1 ? `-part${i + 1}` : '';
+                const url = URL.createObjectURL(content);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `allo-souvenirs-videos${suffix}.zip`;
+                a.click();
+                URL.revokeObjectURL(url);
+
+                // pause between downloads so iOS doesn't block them
+                if (i < parts.length - 1) {
+                    await new Promise(r => setTimeout(r, 1000));
+                }
+            }
+
+            progress.textContent = parts.length > 1
+                ? `${parts.length} ZIPs téléchargés !`
+                : 'ZIP téléchargé !';
         } catch (e) {
             console.error('ZIP error:', e);
             progress.textContent = 'Erreur lors de la création du ZIP';
