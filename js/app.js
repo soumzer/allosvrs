@@ -28,6 +28,12 @@ const App = {
             }
         }, { passive: false });
 
+        // Block context menu (right-click / long-press) on main photo
+        document.getElementById('main-photo').addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            return false;
+        });
+
         // Check for #setup hash
         if (window.location.hash === '#setup') {
             this.showScreen('setup');
