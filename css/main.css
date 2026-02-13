@@ -184,7 +184,7 @@ body {
   margin: 0;
 }
 
-:lang(ru) .countdown-instruction { font-family: 'Marck Script', cursive; }
+:lang(ru) .countdown-instruction { font-family: 'Playfair Display', serif; }
 :lang(ar) .countdown-instruction { font-family: 'Aref Ruqaa', serif; }
 :lang(ur) .countdown-instruction { font-family: 'Noto Nastaliq Urdu', serif; }
 :lang(hi) .countdown-instruction { font-family: 'Kalam', cursive; }
@@ -283,7 +283,7 @@ body {
   margin: 0;
 }
 
-:lang(ru) .confirmation-message { font-family: 'Marck Script', cursive; }
+:lang(ru) .confirmation-message { font-family: 'Playfair Display', serif; }
 :lang(ar) .confirmation-message { font-family: 'Aref Ruqaa', serif; }
 :lang(ur) .confirmation-message { font-family: 'Noto Nastaliq Urdu', serif; }
 :lang(hi) .confirmation-message { font-family: 'Kalam', cursive; }
