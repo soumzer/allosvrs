@@ -185,6 +185,7 @@ body {
 }
 
 :lang(ru) .countdown-instruction { font-family: 'Playfair Display', serif; }
+:lang(ur) .countdown-instruction { font-family: 'Noto Nastaliq Urdu', serif; }
 
 .countdown-number {
   font-size: 10rem;
@@ -281,6 +282,7 @@ body {
 }
 
 :lang(ru) .confirmation-message { font-family: 'Playfair Display', serif; }
+:lang(ur) .confirmation-message { font-family: 'Noto Nastaliq Urdu', serif; }
 
 .confirmation-logo {
   max-height: 80px;
