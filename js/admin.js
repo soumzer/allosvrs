@@ -429,7 +429,10 @@ const Admin = {
 
                 const zip = new JSZip();
                 zip.file('manifest.json', manifestJson);
-                parts[i].forEach(v => zip.file(v.filename, v.blob));
+                parts[i].forEach(v => {
+                    const folder = v.promoAuthorized ? '01-Share-on-social/' : '02-Hosts-only/';
+                    zip.file(folder + v.filename, v.blob);
+                });
                 const content = await zip.generateAsync({ type: 'blob' });
 
                 const suffix = parts.length > 1 ? `-part${i + 1}` : '';
