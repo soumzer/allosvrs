@@ -81,6 +81,7 @@ const Admin = {
 
     loadEventConfig() {
         const config = Config.getAll();
+        document.getElementById('cfg-host-names').value = config.hostNames || '';
         document.getElementById('cfg-countdown').value = config.countdownDuration || 5;
         document.getElementById('cfg-max-recording').value = config.maxRecording || 600;
         document.getElementById('cfg-beep').value = config.beep || 'on';
@@ -146,6 +147,7 @@ const Admin = {
 
     async saveEventConfig() {
         const config = Config.getAll();
+        config.hostNames = document.getElementById('cfg-host-names').value.trim();
         config.countdownDuration = parseInt(document.getElementById('cfg-countdown').value);
         config.maxRecording = parseInt(document.getElementById('cfg-max-recording').value);
         config.beep = document.getElementById('cfg-beep').value;

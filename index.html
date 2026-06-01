@@ -49,6 +49,21 @@
     <button id="btn-stop" class="btn-stop" data-i18n="stop">Arrêter</button>
   </section>
 
+  <!-- Screen: Consent -->
+  <section id="screen-consent" class="screen">
+    <div class="consent-content">
+      <h2 class="consent-title" data-i18n="consent_title">Avant d'enregistrer ta vidéo</h2>
+      <label class="consent-option">
+        <input type="checkbox" id="consent-checkbox">
+        <span class="consent-checkbox-text" data-i18n="consent_text">Allô Souvenirs peut partager ma vidéo sur les réseaux (@allosouvenirs). Si elle est publiée, écris-nous en DM pour récupérer ta version HD.</span>
+      </label>
+      <p id="consent-host-note" class="consent-host-note">Dans tous les cas, ta vidéo est envoyée aux organisateurs.</p>
+      <button id="btn-consent-continue" class="btn-consent-continue" data-i18n="consent_continue">Continuer</button>
+      <p class="consent-age-note" data-i18n="consent_18plus">En cliquant Continuer, je confirme avoir 18 ans ou plus.</p>
+      <button id="btn-consent-learn-more" class="btn-learn-more" data-i18n="consent_learn_more" disabled>En savoir plus →</button>
+    </div>
+  </section>
+
   <!-- Screen: Confirmation -->
   <section id="screen-confirmation" class="screen">
     <div class="confirmation-content">
@@ -93,6 +108,10 @@
           <input type="file" id="cfg-photo" accept="image/*">
           <img id="preview-photo" class="preview-img" hidden>
           <button id="btn-delete-photo" class="btn-small btn-danger" hidden>Supprimer</button>
+        </div>
+        <div class="form-group">
+          <label for="cfg-host-names">Nom des hôtes (affiché à l'invité)</label>
+          <input type="text" id="cfg-host-names" placeholder="Ex: Sophie & Marc / Société XYZ / Anniversaire Lina">
         </div>
         <div class="form-group">
           <label>Position du bouton</label>

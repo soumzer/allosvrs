@@ -9,6 +9,7 @@ const Config = {
         language: 'fr',
         theme: 'mariage-classique',
         customColors: null,
+        hostNames: '',
         pin: '2402'
     },
 
@@ -62,11 +63,11 @@ const VideoStorage = {
         });
     },
 
-    async saveVideo(blob) {
+    async saveVideo(blob, promoAuthorized) {
         const now = new Date();
         const pad = (n) => String(n).padStart(2, '0');
         const filename = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}_${pad(now.getHours())}h${pad(now.getMinutes())}m${pad(now.getSeconds())}.mp4`;
-        const record = { blob, filename, timestamp: now.toISOString() };
+        const record = { blob, filename, timestamp: now.toISOString(), promoAuthorized: !!promoAuthorized };
 
         return new Promise((resolve, reject) => {
             const tx = this.db.transaction('videos', 'readwrite');

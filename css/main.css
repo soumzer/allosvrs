@@ -298,6 +298,109 @@ body {
 }
 
 /* --------------------------------------------------------------------------
+   6 bis. Consent Screen (screen-consent)
+   -------------------------------------------------------------------------- */
+
+.consent-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.4rem;
+  max-width: 600px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.consent-title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin: 0 0 0.4rem 0;
+}
+
+.consent-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.2rem 1.4rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 25%, transparent);
+  border-radius: 14px;
+  cursor: pointer;
+  text-align: left;
+  line-height: 1.45;
+  width: 100%;
+}
+
+.consent-option input[type="checkbox"] {
+  width: 32px;
+  height: 32px;
+  margin: 0;
+  flex-shrink: 0;
+  cursor: pointer;
+  accent-color: var(--btn-color);
+}
+
+.consent-checkbox-text {
+  font-size: 1.05rem;
+  color: var(--text-color);
+}
+
+.consent-host-note {
+  font-size: 1.05rem;
+  color: var(--text-color);
+  opacity: 0.85;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.btn-consent-continue {
+  min-height: 60px;
+  min-width: 220px;
+  font-size: 1.15rem;
+  font-weight: 600;
+  background: var(--btn-color);
+  color: var(--btn-text-color, #fff);
+  border: none;
+  border-radius: var(--btn-radius, 12px);
+  padding: 0.9rem 2.5rem;
+  cursor: pointer;
+  margin-top: 0.4rem;
+  letter-spacing: 0.3px;
+  transition: transform 0.15s, opacity 0.15s;
+}
+
+.btn-consent-continue:active {
+  transform: scale(0.97);
+  opacity: 0.9;
+}
+
+.consent-age-note {
+  font-size: 0.8rem;
+  color: var(--text-color);
+  opacity: 0.55;
+  margin: 0;
+}
+
+.btn-learn-more {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  opacity: 0.6;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-top: 0.4rem;
+  padding: 0.5rem;
+}
+
+.btn-learn-more:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  text-decoration: none;
+}
+
+/* --------------------------------------------------------------------------
    7. Admin Panel (screen-setup)
    -------------------------------------------------------------------------- */
 
