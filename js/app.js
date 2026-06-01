@@ -57,6 +57,7 @@ const App = {
         document.getElementById('btn-consent-no').addEventListener('click', () => this._onConsentChoice(false));
         document.getElementById('btn-consent-learn-more').addEventListener('click', () => this._openFaq());
         document.getElementById('btn-faq-back').addEventListener('click', () => this._closeFaq());
+        document.getElementById('btn-faq-close').addEventListener('click', () => this._closeFaq());
         document.getElementById('btn-pin-back').addEventListener('click', () => {
             window.location.hash = '';
             this.showScreen('main');

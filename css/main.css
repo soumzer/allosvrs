@@ -427,6 +427,33 @@ body {
   gap: 1rem;
 }
 
+.btn-faq-close {
+  position: absolute;
+  top: 8px;
+  inset-inline-end: 8px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--text-color);
+  opacity: 0.6;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 8px;
+  transition: opacity 0.15s, background 0.15s;
+}
+
+.btn-faq-close:hover,
+.btn-faq-close:active {
+  opacity: 1;
+  background: color-mix(in srgb, var(--text-color) 8%, transparent);
+}
+
 .btn-faq-back {
   align-self: flex-start;
   background: none;
