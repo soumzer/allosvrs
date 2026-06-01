@@ -411,11 +411,27 @@ const Admin = {
             });
             if (currentPart.length > 0) parts.push(currentPart);
 
+            // Global manifest (same content in every part) — per-video promoAuthorized
+            // lets the host sort/filter by consent; size_bytes lets them verify integrity.
+            const manifest = {
+                generated_at: new Date().toISOString(),
+                host_names: Config.get('hostNames') || '',
+                total_videos: videos.length,
+                videos: videos.map(v => ({
+                    filename: v.filename,
+                    timestamp: v.timestamp,
+                    size_bytes: v.blob.size || 0,
+                    promoAuthorized: !!v.promoAuthorized
+                }))
+            };
+            const manifestJson = JSON.stringify(manifest, null, 2);
+
             for (let i = 0; i < parts.length; i++) {
                 const label = parts.length > 1 ? ` (${i + 1}/${parts.length})` : '';
                 progress.textContent = `Préparation du ZIP${label}...`;
 
                 const zip = new JSZip();
+                zip.file('manifest.json', manifestJson);
                 parts[i].forEach(v => zip.file(v.filename, v.blob));
                 const content = await zip.generateAsync({ type: 'blob' });
 
