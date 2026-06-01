@@ -148,27 +148,16 @@ body {
   pointer-events: none;
 }
 
-/* Invisible button in overlay mode */
+/* Invisible button in overlay mode — size and position driven by Config.buttonPosition */
 .text-overlay .btn-record {
   position: absolute;
   z-index: 3;
   background: transparent;
   color: transparent;
   border: none;
-  min-width: 350px;
-  min-height: 120px;
+  padding: 0;
+  margin: 0;
 }
-
-/* 9 button positions (only in overlay mode) */
-.text-overlay.btn-pos-top-left .btn-record { top: 8%; left: 8%; }
-.text-overlay.btn-pos-top-center .btn-record { top: 8%; left: 50%; transform: translateX(-50%); }
-.text-overlay.btn-pos-top-right .btn-record { top: 8%; right: 8%; }
-.text-overlay.btn-pos-middle-left .btn-record { top: 50%; left: 8%; transform: translateY(-50%); }
-.text-overlay.btn-pos-middle-center .btn-record { top: 50%; left: 50%; transform: translate(-50%, -50%); }
-.text-overlay.btn-pos-middle-right .btn-record { top: 50%; right: 8%; transform: translateY(-50%); }
-.text-overlay.btn-pos-bottom-left .btn-record { bottom: 8%; left: 8%; }
-.text-overlay.btn-pos-bottom-center .btn-record { bottom: 8%; left: 50%; transform: translateX(-50%); }
-.text-overlay.btn-pos-bottom-right .btn-record { bottom: 8%; right: 8%; }
 
 /* --------------------------------------------------------------------------
    4. Countdown Screen (screen-countdown)
@@ -728,31 +717,65 @@ body {
   object-fit: contain;
 }
 
-/* Button position grid selector */
+/* Button position preview with drag/resize hitbox */
 
-.btn-position-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 4px;
-  width: 180px;
-  height: 120px;
-  margin-top: 0.5rem;
+.form-hint {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.3;
 }
 
-.grid-cell {
-  background: #e0e0e0;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.15s;
+.btn-position-preview {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  aspect-ratio: 4 / 3;
+  background: #ddd;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
-.grid-cell:hover {
-  background: #ccc;
+.position-preview-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
 }
 
-.grid-cell.active {
-  background: #333;
+.position-hitbox {
+  position: absolute;
+  border: 2px dashed rgba(255, 255, 255, 0.85);
+  background: rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.4);
+  cursor: grab;
+  box-sizing: border-box;
 }
+
+.position-hitbox:active {
+  cursor: grabbing;
+}
+
+.position-handle {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background: #fff;
+  border: 2px solid #333;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.position-handle-tl { top: -11px; left: -11px; cursor: nwse-resize; }
+.position-handle-tr { top: -11px; right: -11px; cursor: nesw-resize; }
+.position-handle-bl { bottom: -11px; left: -11px; cursor: nesw-resize; }
+.position-handle-br { bottom: -11px; right: -11px; cursor: nwse-resize; }
 
 /* Form Actions */
 

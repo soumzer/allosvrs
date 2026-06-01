@@ -27,15 +27,11 @@ const Admin = {
             document.getElementById('preview-photo').hidden = true;
             document.getElementById('btn-delete-photo').hidden = true;
             document.getElementById('cfg-photo').value = '';
+            this._loadPositionPreview();
         });
 
-        // Button position grid
-        document.querySelectorAll('.grid-cell').forEach(cell => {
-            cell.addEventListener('click', () => {
-                document.querySelectorAll('.grid-cell').forEach(c => c.classList.remove('active'));
-                cell.classList.add('active');
-            });
-        });
+        // Button position drag/resize
+        this._setupPositionDragger();
 
         // Event buttons
         document.getElementById('btn-save-event').addEventListener('click', () => this.saveEventConfig());
@@ -87,11 +83,10 @@ const Admin = {
         document.getElementById('cfg-beep').value = config.beep || 'on';
         document.getElementById('cfg-language').value = config.language || 'fr';
 
-        // Button position grid
-        const btnPos = config.buttonPosition || 'bottom-center';
-        document.querySelectorAll('.grid-cell').forEach(c => c.classList.remove('active'));
-        const activeCell = document.querySelector(`.grid-cell[data-pos="${btnPos}"]`);
-        if (activeCell) activeCell.classList.add('active');
+        // Button position (object format)
+        this._currentPosition = config.buttonPosition || { x: 50, y: 85, width: 30, height: 10 };
+        this._applyHitboxStyle(this._currentPosition);
+        this._loadPositionPreview();
 
         this.loadImagePreview('event-photo', 'preview-photo', 'btn-delete-photo');
     },
@@ -117,6 +112,9 @@ const Admin = {
             const resized = await this.resizeImage(file, 1920);
             await VideoStorage.saveImage(imageKey, resized);
             this.loadImagePreview(imageKey, previewId, imageKey === 'event-photo' ? 'btn-delete-photo' : null);
+            if (imageKey === 'event-photo') {
+                this._loadPositionPreview();
+            }
         });
     },
 
@@ -151,8 +149,7 @@ const Admin = {
         config.countdownDuration = parseInt(document.getElementById('cfg-countdown').value);
         config.maxRecording = parseInt(document.getElementById('cfg-max-recording').value);
         config.beep = document.getElementById('cfg-beep').value;
-        const activeCell = document.querySelector('.grid-cell.active');
-        config.buttonPosition = activeCell ? activeCell.dataset.pos : 'bottom-center';
+        config.buttonPosition = this._currentPosition || { x: 50, y: 85, width: 30, height: 10 };
         config.language = document.getElementById('cfg-language').value;
         Config.saveAll(config);
 
@@ -470,5 +467,140 @@ const Admin = {
         if (!confirm('Supprimer TOUTES les vidéos ? Cette action est irréversible.')) return;
         await VideoStorage.clearAllVideos();
         this.loadVideoList();
+    },
+
+    // ===== POSITION DRAG / RESIZE =====
+
+    _setupPositionDragger() {
+        const preview = document.getElementById('btn-position-preview');
+        const hitbox = document.getElementById('position-hitbox');
+
+        let mode = null; // null | 'drag' | 'tl' | 'tr' | 'bl' | 'br'
+        let startPointer = null;
+        let startPos = null;
+        let activeTarget = null;
+
+        const onPointerDown = (e) => {
+            const target = e.target;
+            if (target.classList.contains('position-handle')) {
+                mode = target.dataset.handle;
+            } else if (target === hitbox) {
+                mode = 'drag';
+            } else {
+                return;
+            }
+            startPointer = { x: e.clientX, y: e.clientY };
+            startPos = { ...this._currentPosition };
+            activeTarget = target;
+            target.setPointerCapture(e.pointerId);
+            e.preventDefault();
+        };
+
+        const onPointerMove = (e) => {
+            if (!mode) return;
+            const rect = preview.getBoundingClientRect();
+            const dxPct = ((e.clientX - startPointer.x) / rect.width) * 100;
+            const dyPct = ((e.clientY - startPointer.y) / rect.height) * 100;
+
+            let pos;
+            if (mode === 'drag') {
+                pos = {
+                    x: startPos.x + dxPct,
+                    y: startPos.y + dyPct,
+                    width: startPos.width,
+                    height: startPos.height
+                };
+                pos = this._snapPosition(pos);
+            } else {
+                pos = this._resizeFromCorner(startPos, mode, dxPct, dyPct);
+            }
+            pos = this._clampPosition(pos);
+            this._currentPosition = pos;
+            this._applyHitboxStyle(pos);
+        };
+
+        const onPointerUp = (e) => {
+            if (activeTarget) {
+                try { activeTarget.releasePointerCapture(e.pointerId); } catch (_) {}
+            }
+            mode = null;
+            activeTarget = null;
+        };
+
+        preview.addEventListener('pointerdown', onPointerDown);
+        preview.addEventListener('pointermove', onPointerMove);
+        preview.addEventListener('pointerup', onPointerUp);
+        preview.addEventListener('pointercancel', onPointerUp);
+    },
+
+    _snapPosition(pos) {
+        // Snap center to {0, 33, 50, 67, 100} on each axis within ±5%
+        const targets = [0, 33, 50, 67, 100];
+        for (const t of targets) {
+            if (Math.abs(pos.x - t) <= 5) pos.x = t;
+            if (Math.abs(pos.y - t) <= 5) pos.y = t;
+        }
+        return pos;
+    },
+
+    _clampPosition(pos) {
+        pos.width = Math.max(15, Math.min(80, pos.width));
+        pos.height = Math.max(5, Math.min(40, pos.height));
+        const halfW = pos.width / 2;
+        const halfH = pos.height / 2;
+        pos.x = Math.max(halfW, Math.min(100 - halfW, pos.x));
+        pos.y = Math.max(halfH, Math.min(100 - halfH, pos.y));
+        return pos;
+    },
+
+    _resizeFromCorner(start, corner, dx, dy) {
+        // The opposite corner stays anchored; new center derived from new bbox.
+        let left = start.x - start.width / 2;
+        let top = start.y - start.height / 2;
+        let right = start.x + start.width / 2;
+        let bottom = start.y + start.height / 2;
+
+        if (corner === 'tl') { left += dx; top += dy; }
+        else if (corner === 'tr') { right += dx; top += dy; }
+        else if (corner === 'bl') { left += dx; bottom += dy; }
+        else if (corner === 'br') { right += dx; bottom += dy; }
+
+        // Prevent corner flip — keep ≥5% before final clamp
+        if (right < left + 5) {
+            if (corner === 'tl' || corner === 'bl') left = right - 5;
+            else right = left + 5;
+        }
+        if (bottom < top + 5) {
+            if (corner === 'tl' || corner === 'tr') top = bottom - 5;
+            else bottom = top + 5;
+        }
+
+        const newW = right - left;
+        const newH = bottom - top;
+        return {
+            x: left + newW / 2,
+            y: top + newH / 2,
+            width: newW,
+            height: newH
+        };
+    },
+
+    _applyHitboxStyle(pos) {
+        const hitbox = document.getElementById('position-hitbox');
+        hitbox.style.left = (pos.x - pos.width / 2) + '%';
+        hitbox.style.top = (pos.y - pos.height / 2) + '%';
+        hitbox.style.width = pos.width + '%';
+        hitbox.style.height = pos.height + '%';
+    },
+
+    async _loadPositionPreview() {
+        const blob = await VideoStorage.getImage('event-photo');
+        const img = document.getElementById('position-preview-photo');
+        if (blob) {
+            img.src = URL.createObjectURL(blob);
+            img.hidden = false;
+        } else {
+            img.hidden = true;
+        }
     }
 };

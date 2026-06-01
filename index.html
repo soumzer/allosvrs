@@ -114,17 +114,16 @@
           <input type="text" id="cfg-host-names" placeholder="Ex: Sophie & Marc / Société XYZ / Anniversaire Lina">
         </div>
         <div class="form-group">
-          <label>Position du bouton</label>
-          <div id="btn-position-grid" class="btn-position-grid">
-            <div class="grid-cell" data-pos="top-left"></div>
-            <div class="grid-cell" data-pos="top-center"></div>
-            <div class="grid-cell" data-pos="top-right"></div>
-            <div class="grid-cell" data-pos="middle-left"></div>
-            <div class="grid-cell" data-pos="middle-center"></div>
-            <div class="grid-cell" data-pos="middle-right"></div>
-            <div class="grid-cell" data-pos="bottom-left"></div>
-            <div class="grid-cell active" data-pos="bottom-center"></div>
-            <div class="grid-cell" data-pos="bottom-right"></div>
+          <label>Zone tactile du bouton "Enregistrer"</label>
+          <p class="form-hint">Glissez pour déplacer · tirez les coins pour redimensionner · invisible pour les invités</p>
+          <div id="btn-position-preview" class="btn-position-preview">
+            <img id="position-preview-photo" class="position-preview-photo" alt="" hidden>
+            <div id="position-hitbox" class="position-hitbox">
+              <div class="position-handle position-handle-tl" data-handle="tl"></div>
+              <div class="position-handle position-handle-tr" data-handle="tr"></div>
+              <div class="position-handle position-handle-bl" data-handle="bl"></div>
+              <div class="position-handle position-handle-br" data-handle="br"></div>
+            </div>
           </div>
         </div>
         <div class="form-group">

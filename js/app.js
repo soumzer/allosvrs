@@ -124,11 +124,16 @@ const App = {
     },
 
     async applyMainScreen(config) {
-        // Button position
-        const mainContent = document.querySelector('.main-content');
-        const positions = ['top-left','top-center','top-right','middle-left','middle-center','middle-right','bottom-left','bottom-center','bottom-right'];
-        positions.forEach(p => mainContent.classList.remove('btn-pos-' + p));
-        mainContent.classList.add('btn-pos-' + (config.buttonPosition || 'bottom-center'));
+        // Apply button position (object format) as inline styles on #btn-record
+        const btn = document.getElementById('btn-record');
+        const pos = config.buttonPosition;
+        btn.style.left = (pos.x - pos.width / 2) + '%';
+        btn.style.top = (pos.y - pos.height / 2) + '%';
+        btn.style.width = pos.width + '%';
+        btn.style.height = pos.height + '%';
+        btn.style.right = 'auto';
+        btn.style.bottom = 'auto';
+        btn.style.transform = 'none';
 
         // Design photo from IndexedDB
         const photoEl = document.getElementById('main-photo');

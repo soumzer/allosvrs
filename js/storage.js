@@ -2,7 +2,7 @@
 
 const Config = {
     defaults: {
-        buttonPosition: 'bottom-center',
+        buttonPosition: { x: 50, y: 85, width: 30, height: 10 },
         countdownDuration: 5,
         maxRecording: 600,
         beep: 'on',
@@ -15,11 +15,13 @@ const Config = {
 
     get(key) {
         const stored = localStorage.getItem('allosvrs_config');
+        let val;
         if (stored) {
             const parsed = JSON.parse(stored);
-            if (key in parsed) return parsed[key];
+            if (key in parsed) val = parsed[key];
         }
-        return this.defaults[key];
+        if (val === undefined) val = this.defaults[key];
+        return this._migrate(key, val);
     },
 
     set(key, value) {
@@ -32,11 +34,37 @@ const Config = {
     getAll() {
         const stored = localStorage.getItem('allosvrs_config');
         const config = stored ? JSON.parse(stored) : {};
-        return { ...this.defaults, ...config };
+        const merged = { ...this.defaults, ...config };
+        Object.keys(merged).forEach(k => {
+            merged[k] = this._migrate(k, merged[k]);
+        });
+        return merged;
     },
 
     saveAll(obj) {
         localStorage.setItem('allosvrs_config', JSON.stringify(obj));
+    },
+
+    _migrate(key, val) {
+        if (key === 'buttonPosition' && typeof val === 'string') {
+            return this._legacyPositionToObject(val);
+        }
+        return val;
+    },
+
+    _legacyPositionToObject(str) {
+        const map = {
+            'top-left':      { x: 15, y: 8,  width: 30, height: 10 },
+            'top-center':    { x: 50, y: 8,  width: 30, height: 10 },
+            'top-right':     { x: 85, y: 8,  width: 30, height: 10 },
+            'middle-left':   { x: 15, y: 50, width: 30, height: 10 },
+            'middle-center': { x: 50, y: 50, width: 30, height: 10 },
+            'middle-right':  { x: 85, y: 50, width: 30, height: 10 },
+            'bottom-left':   { x: 15, y: 92, width: 30, height: 10 },
+            'bottom-center': { x: 50, y: 85, width: 30, height: 10 },
+            'bottom-right':  { x: 85, y: 92, width: 30, height: 10 }
+        };
+        return map[str] || { x: 50, y: 85, width: 30, height: 10 };
     }
 };
 
