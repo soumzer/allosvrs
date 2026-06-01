@@ -60,7 +60,7 @@
       <p id="consent-host-note" class="consent-host-note">Dans tous les cas, ta vidéo est envoyée aux organisateurs.</p>
       <button id="btn-consent-continue" class="btn-consent-continue" data-i18n="consent_continue">Continuer</button>
       <p class="consent-age-note" data-i18n="consent_18plus">En cliquant Continuer, je confirme avoir 18 ans ou plus.</p>
-      <button id="btn-consent-learn-more" class="btn-learn-more" data-i18n="consent_learn_more" disabled>En savoir plus →</button>
+      <button id="btn-consent-learn-more" class="btn-learn-more" data-i18n="consent_learn_more">En savoir plus →</button>
     </div>
   </section>
 
@@ -222,6 +222,45 @@
       </div>
     </div>
   </section>
+
+  <!-- Modal: FAQ (overlay, not a screen) -->
+  <div id="faq-modal" class="faq-modal" hidden>
+    <div class="faq-backdrop"></div>
+    <div class="faq-card">
+      <button id="btn-faq-back" class="btn-faq-back" data-i18n="faq_back">← Retour</button>
+      <h2 class="faq-title" data-i18n="faq_title">Questions fréquentes</h2>
+      <ul class="faq-list">
+        <li class="faq-item">
+          <p class="faq-q" data-i18n="faq_q1">Qui reçoit ma vidéo ?</p>
+          <p class="faq-a" data-i18n="faq_a1">Les organisateurs reçoivent toutes les vidéos.</p>
+        </li>
+        <li class="faq-item">
+          <p class="faq-q" data-i18n="faq_q2">Ma vidéo sera-t-elle publiée sur les réseaux ?</p>
+          <p class="faq-a" data-i18n="faq_a2">Uniquement si vous avez coché l'option à l'écran précédent.</p>
+        </li>
+        <li class="faq-item">
+          <p class="faq-q" data-i18n="faq_q3">Comment récupérer une copie HD ?</p>
+          <p class="faq-a" data-i18n="faq_a3">Envoyez un DM à @allosouvenirs si votre vidéo est publiée, sinon demandez aux organisateurs.</p>
+        </li>
+        <li class="faq-item">
+          <p class="faq-q" data-i18n="faq_q4">J'ai changé d'avis, puis-je faire retirer ma vidéo ?</p>
+          <p class="faq-a" data-i18n="faq_a4">Écrivez à allosouvenirs@gmail.com, retrait sous 15 jours.</p>
+        </li>
+        <li class="faq-item">
+          <p class="faq-q" data-i18n="faq_q5">Comment mes données sont-elles traitées ?</p>
+          <p class="faq-a" data-i18n="faq_a5">La vidéo est stockée localement sur l'iPad puis remise aux organisateurs. Aucun email ni numéro n'est collecté.</p>
+        </li>
+        <li class="faq-item">
+          <p class="faq-q" data-i18n="faq_q6">Moins de 18 ans ?</p>
+          <p class="faq-a" data-i18n="faq_a6">Demandez à un parent ou tuteur légal d'enregistrer avec vous.</p>
+        </li>
+      </ul>
+      <div class="faq-footer">
+        <span class="faq-url" dir="ltr">allosouvenirs.com/guest</span>
+        <img src="assets/qr-guest.png" alt="" class="faq-qr">
+      </div>
+    </div>
+  </div>
 
   <script src="js/jszip.min.js"></script>
   <script src="js/storage.js"></script>

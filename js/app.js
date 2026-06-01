@@ -54,6 +54,8 @@ const App = {
         document.getElementById('btn-record').addEventListener('click', () => this.startCountdown());
         document.getElementById('btn-stop').addEventListener('click', () => Camera.stopRecording());
         document.getElementById('btn-consent-continue').addEventListener('click', () => this._onConsentContinue());
+        document.getElementById('btn-consent-learn-more').addEventListener('click', () => this._openFaq());
+        document.getElementById('btn-faq-back').addEventListener('click', () => this._closeFaq());
         document.getElementById('btn-pin-back').addEventListener('click', () => {
             window.location.hash = '';
             this.showScreen('main');
@@ -223,6 +225,14 @@ const App = {
         setTimeout(() => {
             this.showScreen('main');
         }, 5000);
+    },
+
+    _openFaq() {
+        document.getElementById('faq-modal').hidden = false;
+    },
+
+    _closeFaq() {
+        document.getElementById('faq-modal').hidden = true;
     },
 
     async requestWakeLock() {
