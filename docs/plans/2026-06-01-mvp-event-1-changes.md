@@ -52,6 +52,27 @@ Cybercrime Law (n°34 de 2021), et finaliser l'UX iPad.
 - Traduction UR/HI/RU des nouvelles clés consent/FAQ
 - Forwarding `allosouvenirs@gmail.com` → adresse pro
 
+## Tech debt P1 (à traiter post-event 1)
+
+Findings d'audit non bloquants pour event 1 :
+
+- **F3 — Memory leak `URL.createObjectURL`** : dans `_loadPositionPreview()`
+  et `loadImagePreview()` (`js/admin.js`), chaque appel crée un nouveau
+  Blob URL sans `URL.revokeObjectURL()` de l'ancien. Invisible sur usage
+  normal (admin ouvert quelques minutes), s'accumule sur re-uploads
+  intensifs. À patcher avec un tracking des URLs créés.
+
+- **F4 — Pas d'indicateur visuel "position sauvegardée"** dans l'admin
+  drag/resize. Après save, l'admin clique "Prévisualiser" pour voir
+  l'effet, mais aucun feedback immédiat dans le panneau. Ajouter un
+  flash/animation au save.
+
+- **F5 — `setTimeout(showScreen('main'), 5000)`** dans
+  `_onConsentChoice` (`js/app.js`) n'est pas annulable. Si l'invité
+  tape rapidement après confirmation, comportement à valider en
+  conditions réelles. Idéalement : tracking du timeout + clear si
+  l'invité interagit.
+
 ## Contraintes techniques (rappel)
 
 - Vanilla HTML/CSS/JS — pas de framework, pas de build, pas de bundler
