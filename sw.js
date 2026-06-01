@@ -1,4 +1,4 @@
-const CACHE_NAME = 'allosvrs-v27';
+const CACHE_NAME = 'allosvrs-v28';
 const ASSETS = [
     './',
     './index.html',
@@ -13,11 +13,20 @@ const ASSETS = [
     './locales/fr.json',
     './locales/en.json',
     './locales/ar.json',
+    './locales/ur.json',
+    './locales/hi.json',
+    './locales/ru.json',
     './assets/fonts/Tangerine.otf',
     './assets/logos/logo-symbol-purple.png',
     './assets/logos/icon-purple.png',
+    './assets/qr-guest.png',
     './manifest.json'
 ];
+
+// Cache-first for binary/static assets (fonts, images, icons).
+// Network-first for everything else (HTML/JS/CSS/JSON/manifest) so devs
+// always get fresh code on reload without having to reinstall the PWA.
+const STATIC_EXT = /\.(otf|woff2?|ttf|eot|png|jpe?g|gif|webp|svg|ico|mp4|webm)(\?.*)?$/i;
 
 self.addEventListener('install', (e) => {
     e.waitUntil(
@@ -36,7 +45,35 @@ self.addEventListener('activate', (e) => {
 });
 
 self.addEventListener('fetch', (e) => {
-    e.respondWith(
-        caches.match(e.request).then(cached => cached || fetch(e.request))
-    );
+    if (e.request.method !== 'GET') return;
+
+    const url = e.request.url;
+    const isStatic = STATIC_EXT.test(url);
+
+    if (isStatic) {
+        // Cache-first: serve cached if available, else fetch + cache
+        e.respondWith(
+            caches.match(e.request).then(cached => {
+                if (cached) return cached;
+                return fetch(e.request).then(resp => {
+                    if (resp && resp.status === 200 && resp.type === 'basic') {
+                        const copy = resp.clone();
+                        caches.open(CACHE_NAME).then(cache => cache.put(e.request, copy));
+                    }
+                    return resp;
+                });
+            })
+        );
+    } else {
+        // Network-first: try network, update cache; fallback to cache if offline
+        e.respondWith(
+            fetch(e.request).then(resp => {
+                if (resp && resp.status === 200 && resp.type === 'basic') {
+                    const copy = resp.clone();
+                    caches.open(CACHE_NAME).then(cache => cache.put(e.request, copy));
+                }
+                return resp;
+            }).catch(() => caches.match(e.request))
+        );
+    }
 });
