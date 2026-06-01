@@ -19,10 +19,18 @@ html, body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   overscroll-behavior: none;
   touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
   position: fixed;
   width: 100%;
   max-width: 100vw;
   overflow-x: hidden;
+}
+
+/* Re-enable selection inside form text fields (admin host names, PIN, etc.) */
+input, textarea {
+  user-select: auto;
+  -webkit-user-select: auto;
 }
 
 body {
