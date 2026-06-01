@@ -209,7 +209,8 @@ const App = {
         const host = Config.get('hostNames');
         const noteEl = document.getElementById('consent-host-note');
         if (host) {
-            noteEl.textContent = I18n.get('consent_host_note_with').replace('{host}', host);
+            // Wrap host (likely Latin) with LRI/PDI so it stays LTR inside RTL locales
+            noteEl.textContent = I18n.get('consent_host_note_with').replace('{host}', '⁦' + host + '⁩');
         } else {
             noteEl.textContent = I18n.get('consent_host_note_fallback');
         }

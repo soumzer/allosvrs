@@ -465,6 +465,14 @@ body {
   padding: 0.4rem 0.6rem 0.4rem 0;
 }
 
+.btn-faq-back::before {
+  content: '← ';
+}
+
+[dir="rtl"] .btn-faq-back::before {
+  content: '→ ';
+}
+
 .faq-title {
   font-size: 1.5rem;
   font-weight: 600;
