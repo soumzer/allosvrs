@@ -319,67 +319,56 @@ body {
   margin: 0 0 0.4rem 0;
 }
 
-.consent-option {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  padding: 1.2rem 1.4rem;
-  border: 1px solid color-mix(in srgb, var(--text-color) 25%, transparent);
-  border-radius: 14px;
-  cursor: pointer;
-  text-align: left;
-  line-height: 1.45;
-  width: 100%;
-}
-
-.consent-option input[type="checkbox"] {
-  width: 32px;
-  height: 32px;
+.consent-question {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--text-color);
   margin: 0;
-  flex-shrink: 0;
-  cursor: pointer;
-  accent-color: var(--btn-color);
+  line-height: 1.45;
 }
 
-.consent-checkbox-text {
-  font-size: 1.05rem;
+.consent-hd-bonus {
+  font-size: 0.95rem;
   color: var(--text-color);
-}
-
-.consent-host-note {
-  font-size: 1.05rem;
-  color: var(--text-color);
-  opacity: 0.85;
+  opacity: 0.75;
   margin: 0;
   line-height: 1.4;
 }
 
-.btn-consent-continue {
+.consent-host-note {
+  font-size: 0.85rem;
+  color: var(--text-color);
+  opacity: 0.5;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.consent-buttons {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  max-width: 480px;
+  margin-top: 0.4rem;
+}
+
+.btn-consent-choice {
+  flex: 1;
   min-height: 60px;
-  min-width: 220px;
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   font-weight: 600;
   background: var(--btn-color);
   color: var(--btn-text-color, #fff);
   border: none;
   border-radius: var(--btn-radius, 12px);
-  padding: 0.9rem 2.5rem;
+  padding: 0.9rem 0;
   cursor: pointer;
-  margin-top: 0.4rem;
   letter-spacing: 0.3px;
   transition: transform 0.15s, opacity 0.15s;
 }
 
-.btn-consent-continue:active {
+.btn-consent-choice:active {
   transform: scale(0.97);
   opacity: 0.9;
-}
-
-.consent-age-note {
-  font-size: 0.8rem;
-  color: var(--text-color);
-  opacity: 0.55;
-  margin: 0;
 }
 
 .btn-learn-more {

@@ -53,7 +53,8 @@ const App = {
         // Button listeners
         document.getElementById('btn-record').addEventListener('click', () => this.startCountdown());
         document.getElementById('btn-stop').addEventListener('click', () => Camera.stopRecording());
-        document.getElementById('btn-consent-continue').addEventListener('click', () => this._onConsentContinue());
+        document.getElementById('btn-consent-yes').addEventListener('click', () => this._onConsentChoice(true));
+        document.getElementById('btn-consent-no').addEventListener('click', () => this._onConsentChoice(false));
         document.getElementById('btn-consent-learn-more').addEventListener('click', () => this._openFaq());
         document.getElementById('btn-faq-back').addEventListener('click', () => this._closeFaq());
         document.getElementById('btn-pin-back').addEventListener('click', () => {
@@ -203,21 +204,19 @@ const App = {
     },
 
     _showConsentScreen() {
-        // PDPL art. 6 — opt-in: always start unchecked
-        document.getElementById('consent-checkbox').checked = false;
-
-        // I18n.apply() doesn't handle {host} interpolation, fill manually
-        const tpl = I18n.get('consent_host_note');
-        const host = Config.get('hostNames') || I18n.get('consent_host_fallback');
-        document.getElementById('consent-host-note').textContent = tpl.replace('{host}', host);
+        // Two distinct keys avoid bad grammar with fallback ("à les organisateurs" → "aux organisateurs")
+        const host = Config.get('hostNames');
+        const noteEl = document.getElementById('consent-host-note');
+        if (host) {
+            noteEl.textContent = I18n.get('consent_host_note_with').replace('{host}', host);
+        } else {
+            noteEl.textContent = I18n.get('consent_host_note_fallback');
+        }
 
         this.showScreen('consent');
     },
 
-    async _onConsentContinue() {
-        const promoAuthorized = document.getElementById('consent-checkbox').checked;
-        this._pendingPromoAuthorized = promoAuthorized;
-
+    async _onConsentChoice(promoAuthorized) {
         await VideoStorage.saveVideo(this._pendingBlob, promoAuthorized);
         this._pendingBlob = null;
 
