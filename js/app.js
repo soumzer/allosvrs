@@ -58,6 +58,8 @@ const App = {
         document.getElementById('btn-consent-learn-more').addEventListener('click', () => this._openFaq());
         document.getElementById('btn-faq-back').addEventListener('click', () => this._closeFaq());
         document.getElementById('btn-faq-close').addEventListener('click', () => this._closeFaq());
+        // Any tap inside the FAQ modal resets its inactivity timer
+        document.getElementById('faq-modal').addEventListener('click', () => this._resetFaqTimerIfOpen());
         document.getElementById('btn-pin-back').addEventListener('click', () => {
             window.location.hash = '';
             this.showScreen('main');
@@ -221,9 +223,14 @@ const App = {
         }
 
         this.showScreen('consent');
+        this._startConsentTimer();
     },
 
     async _onConsentChoice(promoAuthorized) {
+        this._stopConsentTimer();
+        this._stopFaqTimer();
+        if (!this._pendingBlob) return; // already saved (e.g. by timeout race)
+
         await VideoStorage.saveVideo(this._pendingBlob, promoAuthorized);
         this._pendingBlob = null;
 
@@ -234,11 +241,62 @@ const App = {
     },
 
     _openFaq() {
+        this._stopConsentTimer();
         document.getElementById('faq-modal').hidden = false;
+        this._startFaqTimer();
     },
 
     _closeFaq() {
+        this._stopFaqTimer();
         document.getElementById('faq-modal').hidden = true;
+        // If still in consent flow, give a fresh 30s to decide
+        if (this._pendingBlob) {
+            this._startConsentTimer();
+        }
+    },
+
+    // ===== TIMERS (consent + FAQ inactivity) =====
+    // Consent: 30s idle → auto-save as No + back to main
+    // FAQ:     60s idle → auto-close → consent screen with fresh 30s
+    // Last 10s of each: discreet "Returning..." hint visible
+
+    _startConsentTimer() {
+        this._stopConsentTimer();
+        const noteEl = document.getElementById('consent-returning-note');
+        this._consentHintId = setTimeout(() => { noteEl.hidden = false; }, 20 * 1000);
+        this._consentTimeoutId = setTimeout(() => {
+            // Auto-decline: save with promoAuthorized=false, return main
+            this._onConsentChoice(false);
+        }, 30 * 1000);
+    },
+
+    _stopConsentTimer() {
+        if (this._consentHintId) { clearTimeout(this._consentHintId); this._consentHintId = null; }
+        if (this._consentTimeoutId) { clearTimeout(this._consentTimeoutId); this._consentTimeoutId = null; }
+        const noteEl = document.getElementById('consent-returning-note');
+        if (noteEl) noteEl.hidden = true;
+    },
+
+    _startFaqTimer() {
+        this._stopFaqTimer();
+        const noteEl = document.getElementById('faq-returning-note');
+        this._faqHintId = setTimeout(() => { noteEl.hidden = false; }, 50 * 1000);
+        this._faqTimeoutId = setTimeout(() => {
+            // Inactivity in FAQ → close FAQ, _closeFaq restarts consent timer
+            this._closeFaq();
+        }, 60 * 1000);
+    },
+
+    _stopFaqTimer() {
+        if (this._faqHintId) { clearTimeout(this._faqHintId); this._faqHintId = null; }
+        if (this._faqTimeoutId) { clearTimeout(this._faqTimeoutId); this._faqTimeoutId = null; }
+        const noteEl = document.getElementById('faq-returning-note');
+        if (noteEl) noteEl.hidden = true;
+    },
+
+    _resetFaqTimerIfOpen() {
+        const modal = document.getElementById('faq-modal');
+        if (modal && !modal.hidden) this._startFaqTimer();
     },
 
     async requestWakeLock() {

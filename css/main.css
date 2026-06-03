@@ -386,6 +386,14 @@ body {
   text-decoration: none;
 }
 
+.consent-returning-note {
+  font-size: 0.8rem;
+  color: var(--text-color);
+  opacity: 0.5;
+  font-style: italic;
+  margin: 0.5rem 0 0 0;
+}
+
 /* --------------------------------------------------------------------------
    6 ter. FAQ Modal (overlay)
    -------------------------------------------------------------------------- */
@@ -525,6 +533,15 @@ body {
   border-radius: 4px;
   background: white;
   padding: 4px;
+}
+
+.faq-returning-note {
+  font-size: 0.8rem;
+  color: var(--text-color);
+  opacity: 0.5;
+  font-style: italic;
+  margin: 0.4rem 0 0 0;
+  text-align: center;
 }
 
 /* --------------------------------------------------------------------------
